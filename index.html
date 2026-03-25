@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit Test Study Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e2a;
+    --border: #252a38;
+    --accent: #e8c547;
+    --accent2: #5b8dee;
+    --accent3: #e85d75;
+    --text: #e8eaf2;
+    --muted: #8892aa;
+    --geo: #4ecdc4;
+    --rock: #ff6b6b;
+    --land: #95e06c;
+    --climate: #5b8dee;
+    --natural: #f7a35c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(92,141,238,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(92,141,238,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap { position: relative; z-index: 1; }
+
+  /* ---- HEADER ---- */
+  header {
+    padding: 48px 40px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .header-left { }
+
+  .badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--text);
+  }
+
+  h1 span { color: var(--accent); font-style: italic; }
+
+  .subtitle {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+  }
+
+  .header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .unit-chip {
+    background: linear-gradient(135deg, var(--accent2), #8b5cf6);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    display: flex;
+    gap: 4px;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .nav-btn[data-color="geo"] { --hov: var(--geo); }
+  .nav-btn[data-color="rock"] { --hov: var(--rock); }
+  .nav-btn[data-color="land"] { --hov: var(--land); }
+  .nav-btn[data-color="climate"] { --hov: var(--climate); }
+  .nav-btn[data-color="natural"] { --hov: var(--natural); }
+  .nav-btn[data-color="sheet"] { --hov: var(--accent); }
+
+  .nav-btn.active { border-color: var(--hov, var(--accent)); color: var(--hov, var(--accent)); }
+
+  /* ---- MAIN ---- */
+  main { padding: 40px; max-width: 1100px; margin: 0 auto; }
+
+  .section { display: none; animation: fadeUp 0.35s ease; }
+  .section.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- SECTION HEADER ---- */
+  .sec-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .sec-icon {
+    width: 52px; height: 52px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .sec-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .sec-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ---- CARDS ---- */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 28px; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+  }
+
+  .card:hover { transform: translateY(-2px); border-color: var(--card-accent, var(--accent)); }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--card-accent, var(--accent));
+  }
+
+  .card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .card ul li {
+    font-size: 13.5px;
+    color: var(--text);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .card ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    top: 2px;
+  }
+
+  .card p { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin: 2px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .highlight { color: var(--accent); font-weight: 500; }
+
+  /* ---- TABLE ---- */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 24px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  th {
+    background: var(--surface2);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  /* ---- QUIZ ---- */
+  .quiz-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+
+  .quiz-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .reveal-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.06em;
+  }
+
+  .reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .quiz-ans {
+    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 6px;
+    border-left: 3px solid var(--accent);
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+
+  .quiz-ans.show { display: block; animation: fadeUp 0.2s ease; }
+
+  /* ---- EARTH DIAGRAM ---- */
+  .earth-diagram {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .earth-svg-wrap { flex-shrink: 0; }
+
+  .earth-labels { flex: 1; min-width: 220px; display: flex; flex-direction: column; gap: 10px; }
+
+  .earth-layer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  .layer-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+  .layer-name { font-weight: 500; min-width: 120px; }
+  .layer-info { color: var(--muted); font-size: 12px; }
+
+  /* ---- STUDY SHEET ---- */
+  #sheet-section { }
+
+  .sheet-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 28px;
+  }
+
+  .sheet-controls h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--accent);
+  }
+
+  .topic-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+
+  .chk-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    transition: border-color 0.2s;
+  }
+
+  .chk-label:hover { border-color: var(--accent); }
+
+  .chk-label input[type=checkbox] { accent-color: var(--accent); width: 14px; height: 14px; }
+
+  .gen-btn {
+    align-self: flex-start;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 12px 28px;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .gen-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .loading-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    display: none;
+  }
+
+  .loading-bar.active { display: block; }
+
+  .loading-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 0.4s;
+    animation: loadPulse 1.5s infinite;
+  }
+
+  @keyframes loadPulse {
+    0% { width: 0%; margin-left: 0; }
+    50% { width: 60%; }
+    100% { width: 0%; margin-left: 100%; }
+  }
+
+  #sheet-output {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 36px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    font-family: 'JetBrains Mono', monospace;
+    display: none;
+    position: relative;
+  }
+
+  #sheet-output.visible { display: block; animation: fadeUp 0.4s ease; }
+
+  .copy-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 6px 12px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.2s;
+  }
+
+  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .sheet-rendered { white-space: normal; font-family: 'DM Sans', sans-serif; }
+  .sheet-rendered h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); margin: 24px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .sheet-rendered h3 { font-size: 1rem; color: var(--accent2); margin: 16px 0 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .sheet-rendered p { margin-bottom: 10px; color: var(--text); }
+  .sheet-rendered ul { padding-left: 20px; margin-bottom: 10px; }
+  .sheet-rendered li { margin-bottom: 5px; color: var(--text); }
+  .sheet-rendered strong { color: var(--accent); }
+
+  /* ---- TIMELINE ---- */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background: var(--border); border-radius:2px; }
+
+  .tl-item { position:relative; margin-bottom:20px; }
+  .tl-item::before { content:''; position:absolute; left:-28px; top:6px; width:10px; height:10px; border-radius:50%; background: var(--card-accent, var(--accent)); border: 2px solid var(--bg); }
+  .tl-item strong { font-size:13px; color: var(--card-accent, var(--text)); display:block; margin-bottom:3px; }
+  .tl-item p { font-size:12.5px; color: var(--muted); line-height:1.5; }
+
+  /* COLORS PER SECTION */
+  .geo-color { --card-accent: var(--geo); }
+  .rock-color { --card-accent: var(--rock); }
+  .land-color { --card-accent: var(--land); }
+  .climate-color { --card-accent: var(--climate); }
+  .natural-color { --card-accent: var(--natural); }
+
+  .progress-ring {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+
+  .ring { width: 10px; height: 10px; border-radius: 50%; }
+
+  @media (max-width: 640px) {
+    header { padding: 28px 20px 20px; }
+    nav { padding: 12px 20px; }
+    main { padding: 24px 20px; }
+    .cards-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<header>
+  <div class="header-left">
+    <div class="badge">📚 Study Hub</div>
+    <h1>Unit Test<br><span>Review Guide</span></h1>
+    <p class="subtitle">// geography · earth science · climate · ecology</p>
+  </div>
+  <div class="header-right">
+    <div class="unit-chip">GRADE LEVEL · UNIT REVIEW</div>
+  </div>
+</header>
+
+<nav>
+  <button class="nav-btn active" data-color="geo" onclick="show('geo', this)">🌍 Geologic Time</button>
+  <button class="nav-btn" data-color="rock" onclick="show('rock', this)">🪨 Rock Cycle</button>
+  <button class="nav-btn" data-color="land" onclick="show('land', this)">🏔 Landform Regions</button>
+  <button class="nav-btn" data-color="climate" onclick="show('climate', this)">🌦 Climate</button>
+  <button class="nav-btn" data-color="soil" onclick="show('soil', this)">🌿 Soil & Vegetation</button>
+  <button class="nav-btn" data-color="natural" onclick="show('natural', this)">⚡ Natural Disasters</button>
+  <button class="nav-btn" data-color="sheet" onclick="show('sheet', this)">✨ Study Sheet</button>
+</nav>
+
+<main>
+
+<!-- ============ GEOLOGIC TIME ============ -->
+<div class="section active" id="geo">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(78,205,196,0.12); color: var(--geo);">🌍</div>
+    <div>
+      <div class="sec-title" style="color: var(--geo)">Geologic Time</div>
+      <div class="sec-sub">// structure of earth · eras · plate tectonics</div>
+    </div>
+  </div>
+
+  <!-- Earth cross section -->
+  <div class="earth-diagram geo-color">
+    <div class="earth-svg-wrap">
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="95" fill="#e85d75" opacity="0.15" stroke="#e85d75" stroke-width="1"/>
+        <circle cx="100" cy="100" r="78" fill="#ff6b35" opacity="0.2" stroke="#ff6b35" stroke-width="1"/>
+        <circle cx="100" cy="100" r="55" fill="#f7a35c" opacity="0.25" stroke="#f7a35c" stroke-width="1"/>
+        <circle cx="100" cy="100" r="32" fill="#e8c547" opacity="0.35" stroke="#e8c547" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="15" fill="#e8c547" opacity="0.8"/>
+        <!-- Labels -->
+        <text x="100" y="104" text-anchor="middle" fill="#e8c547" font-size="7" font-family="JetBrains Mono">INNER</text>
+        <text x="100" y="114" text-anchor="middle" fill="#e8c547" font-size="7" font-family="JetBrains Mono">CORE</text>
+        <!-- lines -->
+        <line x1="115" y1="90" x2="150" y2="70" stroke="#f7a35c" stroke-width="0.8" opacity="0.5"/>
+        <text x="153" y="68" fill="#f7a35c" font-size="7" font-family="JetBrains Mono">OUTER</text>
+        <text x="153" y="77" fill="#f7a35c" font-size="7" font-family="JetBrains Mono">CORE</text>
+        <line x1="133" y1="110" x2="158" y2="130" stroke="#ff6b35" stroke-width="0.8" opacity="0.5"/>
+        <text x="161" y="132" fill="#ff6b35" font-size="7" font-family="JetBrains Mono">MANTLE</text>
+        <line x1="118" y1="135" x2="140" y2="155" stroke="#e85d75" stroke-width="0.8" opacity="0.5"/>
+        <text x="143" y="158" fill="#e85d75" font-size="7" font-family="JetBrains Mono">CRUST</text>
+      </svg>
+    </div>
+    <div class="earth-labels">
+      <div class="earth-layer">
+        <div class="layer-dot" style="background: #e8c547;"></div>
+        <div>
+          <div class="layer-name">Inner Core</div>
+          <div class="layer-info">Solid iron-nickel · ~5,400°C · 1,220 km radius</div>
+        </div>
+      </div>
+      <div class="earth-layer">
+        <div class="layer-dot" style="background: #f7a35c;"></div>
+        <div>
+          <div class="layer-name">Outer Core</div>
+          <div class="layer-info">Liquid iron-nickel · generates Earth's magnetic field</div>
+        </div>
+      </div>
+      <div class="earth-layer">
+        <div class="layer-dot" style="background: #ff6b35;"></div>
+        <div>
+          <div class="layer-name">Mantle</div>
+          <div class="layer-info">Semi-solid rock · convection currents drive tectonics</div>
+        </div>
+      </div>
+      <div class="earth-layer">
+        <div class="layer-dot" style="background: #e85d75;"></div>
+        <div>
+          <div class="layer-name">Crust</div>
+          <div class="layer-info">Oceanic (5–10 km) &amp; Continental (30–70 km)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card geo-color">
+      <div class="card-title">Geologic Eras — In Order</div>
+      <div class="timeline">
+        <div class="tl-item"><strong>Precambrian (~4.6 billion – 541 mya)</strong><p>Formation of Earth; first single-celled life; no hard parts (poor fossil record)</p></div>
+        <div class="tl-item"><strong>Paleozoic (541 – 252 mya)</strong><p>"Ancient life" — fish, amphibians, reptiles; first land plants; Pangaea forms; ends in mass extinction</p></div>
+        <div class="tl-item"><strong>Mesozoic (252 – 66 mya)</strong><p>Age of Dinosaurs; first birds &amp; mammals; flowering plants; Pangaea breaks up; K-Pg extinction</p></div>
+        <div class="tl-item"><strong>Cenozoic (66 mya – present)</strong><p>Age of Mammals; humans evolve; Ice Ages; modern continents form</p></div>
+      </div>
+    </div>
+
+    <div class="card geo-color">
+      <div class="card-title">Age of the Earth</div>
+      <ul>
+        <li>Earth is approximately <span class="highlight">4.6 billion years old</span></li>
+        <li>Determined through <span class="highlight">radiometric (radioactive) dating</span> of rocks and meteorites</li>
+        <li>Oldest known rocks ~4.0 billion years old</li>
+        <li>Moon rocks and meteorites confirm 4.6 billion year age</li>
+        <li>Half-life: time for half of radioactive atoms to decay (e.g., Carbon-14, Uranium-238)</li>
+      </ul>
+    </div>
+
+    <div class="card geo-color" style="grid-column: 1 / -1;">
+      <div class="card-title">Plate Tectonics — What It Is + Evidence</div>
+      <p style="margin-bottom:14px">Earth's lithosphere is divided into large <span class="highlight">tectonic plates</span> that move slowly (2–15 cm/year) due to convection currents in the mantle.</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:12px; margin-top:12px">
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--geo)">
+          <strong style="color:var(--geo);font-size:12px;font-family:'JetBrains Mono',monospace">FOSSIL EVIDENCE</strong>
+          <p style="font-size:12.5px;margin-top:6px">Same fossils (Mesosaurus, Glossopteris) found on continents now separated by oceans</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--geo)">
+          <strong style="color:var(--geo);font-size:12px;font-family:'JetBrains Mono',monospace">CONTINENTAL FIT</strong>
+          <p style="font-size:12.5px;margin-top:6px">Coastlines of South America and Africa fit together like puzzle pieces</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--geo)">
+          <strong style="color:var(--geo);font-size:12px;font-family:'JetBrains Mono',monospace">ROCK MATCHING</strong>
+          <p style="font-size:12.5px;margin-top:6px">Identical rock types and mountain ranges found on opposite sides of oceans (Appalachians = Scottish Highlands)</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--geo)">
+          <strong style="color:var(--geo);font-size:12px;font-family:'JetBrains Mono',monospace">SEAFLOOR SPREADING</strong>
+          <p style="font-size:12.5px;margin-top:6px">New crust forms at mid-ocean ridges; magnetic striping symmetrical on either side confirms movement</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--geo)">
+          <strong style="color:var(--geo);font-size:12px;font-family:'JetBrains Mono',monospace">CLIMATE CLUES</strong>
+          <p style="font-size:12.5px;margin-top:6px">Coal (tropical plant fossils) found in Antarctica; glacial deposits in Africa suggest ancient polar positions</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Practice Qs -->
+  <div class="quiz-box geo-color" style="--card-accent:var(--geo)">
+    <div class="quiz-q">Q: What causes tectonic plates to move?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">Convection currents in the mantle — hot material rises, spreads, cools, and sinks, dragging the plates above it along.</div>
+  </div>
+  <div class="quiz-box">
+    <div class="quiz-q">Q: List the layers of the Earth from outermost to innermost and key properties of each.</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>Crust</strong> (thin, solid, rocky) → <strong>Mantle</strong> (thick, semi-solid, convection currents) → <strong>Outer Core</strong> (liquid iron-nickel, generates magnetic field) → <strong>Inner Core</strong> (solid iron-nickel, extremely hot ~5,400°C and under enormous pressure).</div>
+  </div>
+</div>
+
+<!-- ============ ROCK CYCLE ============ -->
+<div class="section" id="rock">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(255,107,107,0.12); color: var(--rock);">🪨</div>
+    <div>
+      <div class="sec-title" style="color: var(--rock)">Rock Cycle & Rock Types</div>
+      <div class="sec-sub">// igneous · sedimentary · metamorphic · definitions</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card rock-color">
+      <div class="card-title">Igneous Rocks</div>
+      <ul>
+        <li><span class="highlight">Formed from:</span> cooling and solidification of magma/lava</li>
+        <li><span class="highlight">Intrusive</span> (plutonic): cools slowly underground → large crystals (e.g. granite, gabbro)</li>
+        <li><span class="highlight">Extrusive</span> (volcanic): cools quickly at surface → small/no crystals (e.g. basalt, obsidian, pumice)</li>
+        <li>Very hard; no layers; may have vesicles (holes) if cooled fast</li>
+      </ul>
+    </div>
+    <div class="card rock-color">
+      <div class="card-title">Sedimentary Rocks</div>
+      <ul>
+        <li><span class="highlight">Formed from:</span> compaction and cementation of sediment layers</li>
+        <li>Examples: sandstone, limestone, shale, conglomerate, coal</li>
+        <li>Key features: <span class="highlight">layers (strata), fossils</span>, rounded grains</li>
+        <li>Most common on Earth's surface; found near ancient water bodies</li>
+        <li>Clastic (particles), chemical (precipitation), organic (remains)</li>
+      </ul>
+    </div>
+    <div class="card rock-color">
+      <div class="card-title">Metamorphic Rocks</div>
+      <ul>
+        <li><span class="highlight">Formed from:</span> heat and/or pressure transforming existing rock</li>
+        <li>Examples: marble (from limestone), quartzite (from sandstone), slate &amp; schist (from shale), gneiss (from granite)</li>
+        <li>Key features: <span class="highlight">foliation</span> (banding), crystals, wavy patterns</li>
+        <li>No fossils; found near tectonic boundaries &amp; mountain roots</li>
+      </ul>
+    </div>
+    <div class="card rock-color">
+      <div class="card-title">Key Rock Cycle Definitions</div>
+      <ul>
+        <li><span class="highlight">Magma:</span> molten rock below Earth's surface</li>
+        <li><span class="highlight">Lava:</span> magma that has reached the surface</li>
+        <li><span class="highlight">Weathering:</span> breaking down rock in place (physical or chemical)</li>
+        <li><span class="highlight">Erosion:</span> transport of weathered material by water, wind, ice</li>
+        <li><span class="highlight">Deposition:</span> settling of eroded material</li>
+        <li><span class="highlight">Lithification:</span> compaction + cementation → sedimentary rock</li>
+        <li><span class="highlight">Crystallization:</span> magma cools → igneous rock</li>
+      </ul>
+    </div>
+    <div class="card rock-color" style="grid-column: 1 / -1;">
+      <div class="card-title">Southern Ontario Bedrock — Daily Impact</div>
+      <p style="margin-bottom:12px">Southern Ontario is underlain mainly by <span class="highlight">limestone and shale</span> (sedimentary rocks) from ancient shallow seas.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">
+        <div style="background:var(--surface2);padding:10px;border-radius:6px"><strong style="color:var(--rock);font-size:12px">Hard Water</strong><p style="font-size:12px;margin-top:4px">Limestone dissolves in groundwater → calcium/magnesium → scale in pipes &amp; kettles</p></div>
+        <div style="background:var(--surface2);padding:10px;border-radius:6px"><strong style="color:var(--rock);font-size:12px">Building Material</strong><p style="font-size:12px;margin-top:4px">Limestone quarried for construction (buildings, roads, aggregate)</p></div>
+        <div style="background:var(--surface2);padding:10px;border-radius:6px"><strong style="color:var(--rock);font-size:12px">Flat Landscape</strong><p style="font-size:12px;margin-top:4px">Sedimentary rock creates relatively flat terrain → agriculture &amp; urban development</p></div>
+        <div style="background:var(--surface2);padding:10px;border-radius:6px"><strong style="color:var(--rock);font-size:12px">Caves &amp; Sinkholes</strong><p style="font-size:12px;margin-top:4px">Dissolved limestone (karst topography) can create underground caves</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: A rock with visible bands/foliation and no fossils. What type is it? How did it form?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">It is a <strong>metamorphic rock</strong>. Foliation forms when minerals are squeezed and aligned under intense heat and pressure, without the rock melting completely. Examples include schist and gneiss. Fossils are destroyed in the process.</div>
+  </div>
+</div>
+
+<!-- ============ LANDFORM REGIONS ============ -->
+<div class="section" id="land">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(149,224,108,0.12); color: var(--land);">🏔</div>
+    <div>
+      <div class="sec-title" style="color: var(--land)">Landform Regions of Canada</div>
+      <div class="sec-sub">// physical characteristics · rock types · human activities · glaciation</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Region</th>
+          <th>Physical Features</th>
+          <th>Rock Types</th>
+          <th>Human Activities</th>
+          <th>Glaciation Effects</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--land)">Canadian Shield</strong></td>
+          <td>Ancient, low hills; many lakes &amp; rivers; thin soil; surrounds Hudson Bay</td>
+          <td>Igneous &amp; metamorphic (oldest rocks in Canada, Precambrian)</td>
+          <td>Mining (gold, nickel, copper), forestry, tourism, hydroelectric power</td>
+          <td>Glaciers scraped surface, created thousands of lakes (including Great Lakes), deposited till, thin/poor soils</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--land)">Interior Plains</strong></td>
+          <td>Flat to gently rolling; three prairie levels (steps); little relief</td>
+          <td>Sedimentary (sandstone, limestone, shale); oil/gas deposits</td>
+          <td>Grain farming, cattle ranching, oil &amp; gas extraction</td>
+          <td>Glacial lake deposits (Lake Agassiz) left flat, fertile soils; drumlins &amp; moraines mark glacial movement</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--land)">Western Cordillera</strong></td>
+          <td>Rugged mountains, valleys, plateaus (Rockies, Coast Mtns, Columbia Mtns)</td>
+          <td>All three types: igneous (granite), sedimentary, metamorphic</td>
+          <td>Tourism/skiing, mining, forestry, fishing (Pacific), hydroelectric</td>
+          <td>U-shaped valleys, cirques, arêtes, fjords (BC coast); moraines; glacial lakes</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--land)">Great Lakes – St. Lawrence Lowlands</strong></td>
+          <td>Flat to rolling; most populous; fertile soils; Peninsula Ontario</td>
+          <td>Sedimentary (limestone, shale)</td>
+          <td>Agriculture, manufacturing, trade, urban centres (Toronto)</td>
+          <td>Great Lakes formed in glacially-scoured basins; drumlins; Niagara Escarpment exposed</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--land)">Appalachian Region</strong></td>
+          <td>Old, eroded mountains; rounded hills; Atlantic coast</td>
+          <td>Igneous &amp; metamorphic (ancient); some sedimentary</td>
+          <td>Fishing, forestry, tourism, some farming (PEI – potatoes)</td>
+          <td>Worn down by glaciers; U-shaped valleys; glacial deposits</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--land)">Arctic/Hudson Bay Lowlands</strong></td>
+          <td>Flat, low-lying; permafrost; muskeg (boggy); treeless tundra</td>
+          <td>Sedimentary (flat-lying), some igneous</td>
+          <td>Limited — some wildlife, Indigenous communities, potential resources</td>
+          <td>Glacial rebound (isostatic uplift) — land still rising after ice sheet weight lifted</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Why does the Canadian Shield have such thin, poor soils?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">Glaciers scraped the ancient bedrock, removing weathered material. The ice deposited much of it elsewhere. The hard igneous and metamorphic bedrock weathers very slowly, and the cold climate limits organic matter buildup, leaving only thin soil layers.</div>
+  </div>
+</div>
+
+<!-- ============ CLIMATE ============ -->
+<div class="section" id="climate">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(91,141,238,0.12); color: var(--climate);">🌦</div>
+    <div>
+      <div class="sec-title" style="color: var(--climate)">Climate Regions</div>
+      <div class="sec-sub">// 6 factors · precipitation types · continental vs maritime</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card climate-color" style="grid-column: 1 / -1;">
+      <div class="card-title">6 Factors That Affect Climate</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
+        <div style="background:var(--surface2);padding:14px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px;font-family:'JetBrains Mono',monospace">① LATITUDE</strong>
+          <p style="font-size:12.5px;margin-top:6px">Areas near the equator receive more direct solar energy → warmer. Poles receive less direct sunlight → colder. Closer to equator = warmer climate.</p>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px;font-family:'JetBrains Mono',monospace">② OCEAN CURRENTS</strong>
+          <p style="font-size:12.5px;margin-top:6px">Warm currents (e.g. Gulf Stream) warm nearby land. Cold currents cool land. Coastal areas are moderated.</p>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px;font-family:'JetBrains Mono',monospace">③ ALTITUDE / ELEVATION</strong>
+          <p style="font-size:12.5px;margin-top:6px">Higher elevation → thinner air → less heat retained → cooler temperatures (~6.5°C drop per 1000m gained).</p>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px;font-family:'JetBrains Mono',monospace">④ LARGE BODIES OF WATER</strong>
+          <p style="font-size:12.5px;margin-top:6px">Water heats and cools slowly (maritime effect) → moderates temperature extremes for nearby land. Interior areas have more extreme temperatures.</p>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px;font-family:'JetBrains Mono',monospace">⑤ PREVAILING WINDS</strong>
+          <p style="font-size:12.5px;margin-top:6px">Winds carry moisture and temperature from their source. Westerlies bring Pacific air to BC. Wind direction determines what kind of air mass arrives.</p>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px;font-family:'JetBrains Mono',monospace">⑥ RELIEF (MOUNTAINS)</strong>
+          <p style="font-size:12.5px;margin-top:6px">Mountains force air to rise → cool → precipitation on windward side (orographic). Leeward side is dry (rain shadow effect).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card climate-color">
+      <div class="card-title">Vancouver — Top 3 Climate Factors</div>
+      <ul>
+        <li><span class="highlight">① Ocean Currents:</span> Warm North Pacific Current moderates temperatures (mild, wet winters)</li>
+        <li><span class="highlight">② Prevailing Winds:</span> Westerlies bring moist Pacific air onshore → high precipitation</li>
+        <li><span class="highlight">③ Relief (Mountains):</span> Coast Mountains force moist air up → orographic precipitation; very high rainfall on windward slopes</li>
+      </ul>
+    </div>
+    <div class="card climate-color">
+      <div class="card-title">Toronto — Top 3 Climate Factors</div>
+      <ul>
+        <li><span class="highlight">① Latitude:</span> Mid-latitude location → cold winters, warm summers (4 distinct seasons)</li>
+        <li><span class="highlight">② Large Bodies of Water:</span> Lake Ontario moderates temperature (lake-effect snow in winter; cooler summers near shore)</li>
+        <li><span class="highlight">③ Prevailing Winds:</span> Variable winds bring cold Arctic air in winter and warm Gulf air in summer → temperature extremes</li>
+      </ul>
+    </div>
+    <div class="card climate-color">
+      <div class="card-title">Continental vs Maritime Climate</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--climate);font-size:12px">Continental</strong>
+          <ul style="margin-top:8px">
+            <li style="font-size:12px;margin-bottom:6px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span><strong>Temperature:</strong> Extreme — very hot summers, very cold winters (large annual range)</li>
+            <li style="font-size:12px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span><strong>Precipitation:</strong> Low and seasonal; mostly summer convectional rain; dry winters</li>
+          </ul>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:#95e06c;font-size:12px">Maritime</strong>
+          <ul style="margin-top:8px">
+            <li style="font-size:12px;margin-bottom:6px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span><strong>Temperature:</strong> Moderate — mild summers, mild winters (small annual range)</li>
+            <li style="font-size:12px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span><strong>Precipitation:</strong> High year-round; frontal &amp; orographic rain; wet winters</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card climate-color">
+      <div class="card-title">3 Types of Precipitation</div>
+      <ul>
+        <li><span class="highlight">① Convectional:</span> Sun heats ground → warm moist air rises → cools → condenses → rain. Mostly in <span class="highlight">summer</span>. Often thunderstorms.</li>
+        <li><span class="highlight">② Orographic (Relief):</span> Air forced over <span class="highlight">mountains</span> → rises &amp; cools → precipitation on windward side. Rain shadow on leeward.</li>
+        <li><span class="highlight">③ Frontal (Cyclonic):</span> Warm &amp; cold air masses meet → warm air rises over cold → precipitation along frontal boundary. Common in fall/winter.</li>
+      </ul>
+    </div>
+
+    <div class="card climate-color">
+      <div class="card-title">Reading Climate Graphs</div>
+      <ul>
+        <li><span class="highlight">Continental graph:</span> Large temperature range (30°C+), low &amp; seasonal precip, summer peak for rain</li>
+        <li><span class="highlight">Maritime graph:</span> Small temperature range (&lt;15°C), high year-round precip, winter precipitation peak</li>
+        <li>Look for: How much do the temperatures fluctuate? Is precipitation evenly spread or seasonal?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Which type of precipitation occurs because of mountains? Explain the process.</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>Orographic (Relief) precipitation.</strong> Moist air is forced upward as it meets a mountain range. As the air rises, it cools, reaches its dew point, and moisture condenses into clouds and precipitation on the windward (facing the wind) side. On the leeward (opposite) side, dry air descends and warms, creating a rain shadow — an area of low precipitation.</div>
+  </div>
+</div>
+
+<!-- ============ SOIL & VEGETATION ============ -->
+<div class="section" id="soil">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(149,224,108,0.12); color: var(--land);">🌿</div>
+    <div>
+      <div class="sec-title" style="color: var(--land)">Soil & Vegetation</div>
+      <div class="sec-sub">// soil profile · permafrost · vegetation zones · treelines</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card land-color">
+      <div class="card-title">4 Components of Soil</div>
+      <ul>
+        <li><span class="highlight">Mineral particles</span> — weathered rock (sand, silt, clay)</li>
+        <li><span class="highlight">Organic matter (humus)</span> — decomposed plant/animal material; dark; nutrient-rich</li>
+        <li><span class="highlight">Water</span> — held in pore spaces; essential for plant growth</li>
+        <li><span class="highlight">Air</span> — in pore spaces; needed by roots and soil organisms</li>
+        <li><em style="color:var(--muted);font-size:12px">Loam = ideal mix of sand, silt, and clay</em></li>
+      </ul>
+    </div>
+    <div class="card land-color">
+      <div class="card-title">Soil Profile — Horizons</div>
+      <ul>
+        <li><span class="highlight">O Horizon:</span> organic layer — leaf litter, partially decomposed material on surface</li>
+        <li><span class="highlight">A Horizon (topsoil):</span> humus-rich; dark; where most plant roots are; most fertile</li>
+        <li><span class="highlight">B Horizon (subsoil):</span> minerals leached from above accumulate here; less organic matter</li>
+        <li><span class="highlight">C Horizon:</span> weathered parent rock</li>
+        <li><span class="highlight">R Horizon:</span> solid bedrock</li>
+      </ul>
+    </div>
+    <div class="card land-color">
+      <div class="card-title">Key Soil Definitions</div>
+      <ul>
+        <li><span class="highlight">Humus:</span> dark, nutrient-rich organic matter from decomposed organisms</li>
+        <li><span class="highlight">Leaching:</span> water moving through soil carries nutrients downward, away from roots</li>
+        <li><span class="highlight">Loam:</span> ideal soil — balanced mix of sand, silt, clay; retains moisture &amp; drains well</li>
+        <li><span class="highlight">Permafrost:</span> ground that remains frozen for 2+ years; found in northern Canada (Yukon, NWT, Nunavut)</li>
+        <li><span class="highlight">Active Layer:</span> top layer of permafrost that thaws in summer; above the permanently frozen ground</li>
+      </ul>
+    </div>
+    <div class="card land-color">
+      <div class="card-title">Vegetation Zones — Key Facts</div>
+      <ul>
+        <li>Southern Ontario is in the <span class="highlight">Mixed Forest (Great Lakes-St. Lawrence Forest)</span> zone</li>
+        <li>Natural vegetation here has largely been <span class="highlight">cleared for agriculture and urban development</span> — most forest is gone</li>
+        <li><span class="highlight">Boreal Shield / Taiga</span> is a transition zone between boreal forest and tundra — trees become sparse and shorter toward the north</li>
+        <li><span class="highlight">Coniferous trees</span> (needles, cone-bearing, evergreen) found in boreal/northern Canada</li>
+        <li><span class="highlight">Deciduous trees</span> (broad leaves, lose leaves in fall) found in southern Ontario &amp; eastern Canada</li>
+      </ul>
+    </div>
+    <div class="card land-color">
+      <div class="card-title">Coniferous vs Deciduous Trees</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--surface2);padding:10px;border-radius:6px">
+          <strong style="color:var(--land);font-size:12px">Coniferous</strong>
+          <ul style="margin-top:8px">
+            <li style="font-size:12px;margin-bottom:5px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span>Needle-shaped leaves</li>
+            <li style="font-size:12px;margin-bottom:5px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span>Stay green year-round (evergreen)</li>
+            <li style="font-size:12px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span>Produce cones (pine, spruce, fir)</li>
+          </ul>
+        </div>
+        <div style="background:var(--surface2);padding:10px;border-radius:6px">
+          <strong style="color:#f7a35c;font-size:12px">Deciduous</strong>
+          <ul style="margin-top:8px">
+            <li style="font-size:12px;margin-bottom:5px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span>Broad, flat leaves</li>
+            <li style="font-size:12px;margin-bottom:5px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span>Drop leaves in autumn</li>
+            <li style="font-size:12px;padding-left:12px;position:relative"><span style="position:absolute;left:0">→</span>Produce flowers/fruit (maple, oak, beech)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="card land-color">
+      <div class="card-title">Treelines — 3 Types & Causes</div>
+      <ul>
+        <li><span class="highlight">Arctic Treeline:</span> Where trees can no longer survive due to cold temperatures — marks the northern limit of forests in Canada</li>
+        <li><span class="highlight">Alpine Treeline:</span> On mountains — where altitude makes it too cold for trees to grow (above this = alpine meadow/rock)</li>
+        <li><span class="highlight">3 Factors causing treelines:</span> (1) Too cold / short growing season, (2) Permafrost prevents root growth, (3) Strong winds damage or stunt tree growth</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ NATURAL DISASTERS ============ -->
+<div class="section" id="natural">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(247,163,92,0.12); color: var(--natural);">⚡</div>
+    <div>
+      <div class="sec-title" style="color: var(--natural)">Natural Disasters</div>
+      <div class="sec-sub">// emergency response kit · preparedness</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card natural-color" style="grid-column: 1 / -1;">
+      <div class="card-title">Emergency Response Kit — What to Include</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px">
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">💧 Water</strong>
+          <p style="font-size:12px;margin-top:5px">2 litres per person per day; at least 72-hour supply (3 days minimum)</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">🥫 Food</strong>
+          <p style="font-size:12px;margin-top:5px">Non-perishable food (canned goods, dried food); manual can opener; 72-hour supply</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">🔦 Flashlight & Radio</strong>
+          <p style="font-size:12px;margin-top:5px">Battery-powered or hand-crank flashlight; battery/hand-crank radio for emergency alerts; extra batteries</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">🩹 First Aid Kit</strong>
+          <p style="font-size:12px;margin-top:5px">Bandages, antiseptic, medications, first aid manual; any prescription medications for family members</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">🧥 Warmth & Shelter</strong>
+          <p style="font-size:12px;margin-top:5px">Warm clothes, sturdy shoes, blankets/sleeping bags; extra clothing for weather changes</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">📋 Documents & Cash</strong>
+          <p style="font-size:12px;margin-top:5px">Copies of important documents (ID, insurance); cash (ATMs may not work); emergency contact list</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">🔧 Tools</strong>
+          <p style="font-size:12px;margin-top:5px">Whistle (signal for help), multi-tool/knife, matches/lighter in waterproof container, duct tape</p>
+        </div>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px">
+          <strong style="color:var(--natural);font-size:12px">🐾 Special Needs</strong>
+          <p style="font-size:12px;margin-top:5px">Baby supplies, pet food, hearing aid batteries, glasses — account for all family members' specific needs</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Why do emergency kits recommend a 72-hour (3-day) supply of food and water?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">It typically takes emergency services at least 72 hours to reach and assist all affected residents after a major disaster. During this period, utilities (water, electricity), roads, and stores may be unavailable. A 72-hour supply allows a household to be self-sufficient until official help arrives.</div>
+  </div>
+</div>
+
+<!-- ============ STUDY SHEET ============ -->
+<div class="section" id="sheet">
+  <div class="sec-head">
+    <div class="sec-icon" style="background: rgba(232,197,71,0.12); color: var(--accent);">✨</div>
+    <div>
+      <div class="sec-title" style="color: var(--accent)">AI Study Sheet Generator</div>
+      <div class="sec-sub">// select topics → generate a custom study cheat sheet</div>
+    </div>
+  </div>
+
+  <div class="sheet-controls">
+    <h3>Choose topics to include in your study sheet:</h3>
+    <div class="topic-checkboxes">
+      <label class="chk-label"><input type="checkbox" value="geologic_time" checked> 🌍 Geologic Time & Structure of Earth</label>
+      <label class="chk-label"><input type="checkbox" value="plate_tectonics" checked> 🌊 Plate Tectonics & Evidence</label>
+      <label class="chk-label"><input type="checkbox" value="rock_cycle" checked> 🪨 Rock Cycle & Rock Types</label>
+      <label class="chk-label"><input type="checkbox" value="southern_ontario_bedrock"> 🏗 Southern Ontario Bedrock</label>
+      <label class="chk-label"><input type="checkbox" value="landform_regions" checked> 🏔 Landform Regions of Canada</label>
+      <label class="chk-label"><input type="checkbox" value="climate_factors" checked> 🌦 6 Climate Factors</label>
+      <label class="chk-label"><input type="checkbox" value="vancouver_toronto"> 🏙 Vancouver & Toronto Climate</label>
+      <label class="chk-label"><input type="checkbox" value="continental_maritime" checked> ⚖ Continental vs Maritime Climate</label>
+      <label class="chk-label"><input type="checkbox" value="precipitation"> 🌧 Types of Precipitation</label>
+      <label class="chk-label"><input type="checkbox" value="soil_vegetation" checked> 🌿 Soil & Vegetation</label>
+      <label class="chk-label"><input type="checkbox" value="treelines"> 🌲 Treelines</label>
+      <label class="chk-label"><input type="checkbox" value="natural_disasters" checked> ⚡ Natural Disasters & Emergency Kit</label>
+    </div>
+    <div class="loading-bar" id="loading-bar"><div class="loading-bar-inner"></div></div>
+    <button class="gen-btn" id="gen-btn" onclick="generateSheet()">
+      <span>✨</span> Generate Study Sheet
+    </button>
+  </div>
+
+  <div id="sheet-output">
+    <button class="copy-btn" onclick="copySheet()">Copy</button>
+    <div id="sheet-content" class="sheet-rendered"></div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggle(btn) {
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Hide Answer' : 'Reveal Answer';
+}
+
+function copySheet() {
+  const text = document.getElementById('sheet-content').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+async function generateSheet() {
+  const checkboxes = document.querySelectorAll('.topic-checkboxes input[type=checkbox]:checked');
+  const selected = Array.from(checkboxes).map(c => c.value);
+  if (selected.length === 0) { alert('Please select at least one topic.'); return; }
+
+  const btn = document.getElementById('gen-btn');
+  const loading = document.getElementById('loading-bar');
+  const output = document.getElementById('sheet-output');
+  const content = document.getElementById('sheet-content');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Generating...';
+  loading.classList.add('active');
+  output.classList.remove('visible');
+
+  const topicMap = {
+    geologic_time: "Geologic Time: Structure of Earth (inner core, outer core, mantle, crust - properties of each), Geologic Eras (Precambrian, Paleozoic, Mesozoic, Cenozoic - order, major events), Age of the Earth (~4.6 billion years, radiometric dating)",
+    plate_tectonics: "Plate Tectonics: definition, explanation of convection currents, 5 types of evidence (fossil evidence, continental fit, rock matching, seafloor spreading, climate clues)",
+    rock_cycle: "Rock Cycle & 3 Rock Types: Igneous (intrusive/extrusive, examples, characteristics), Sedimentary (formation, examples, fossils, layers), Metamorphic (heat/pressure, foliation, examples). Key definitions: magma, lava, weathering, erosion, deposition, lithification",
+    southern_ontario_bedrock: "How Southern Ontario's sedimentary bedrock (limestone/shale) affects daily life: hard water, building materials, flat terrain, karst features",
+    landform_regions: "Canada's 6 Landform Regions: Canadian Shield, Interior Plains, Western Cordillera, Great Lakes-St. Lawrence Lowlands, Appalachian Region, Arctic/Hudson Bay Lowlands - for each: physical characteristics, rock types, human activities, effects of glaciation",
+    climate_factors: "6 Factors that Affect Climate with detailed explanations: latitude, ocean currents, altitude/elevation, large bodies of water, prevailing winds, relief/mountains",
+    vancouver_toronto: "3 Most Important Climate Factors for Vancouver (ocean currents, prevailing winds, relief) and Toronto (latitude, large bodies of water, prevailing winds) with explanations",
+    continental_maritime: "Continental vs Maritime Climate - 2 key differences in temperature (extreme vs moderate annual range) and precipitation (low/seasonal vs high/year-round)",
+    precipitation: "3 Types of Precipitation: Convectional (summer, sun heats ground), Orographic/Relief (mountains, windward side), Frontal/Cyclonic (air masses meeting). Which occurs in summer? Which due to mountains?",
+    soil_vegetation: "4 Soil Components, Soil Profile horizons (O, A, B, C, R), Definitions: humus, leaching, loam, permafrost, active layer. Vegetation: our zone (Mixed Forest), what happened to natural vegetation, transition zone (Boreal Shield/Taiga), coniferous vs deciduous differences and locations",
+    treelines: "Treeline definition, 3 types (Arctic, Alpine, + 1 more), 3 factors that cause treelines (cold/short growing season, permafrost, strong winds), where they're found in Canada",
+    natural_disasters: "Emergency Response Kit contents: water (2L/person/day, 72hr supply), food (non-perishable, 72hr), flashlight & radio (battery/hand-crank), first aid kit, warmth & shelter items, documents & cash, tools (whistle, multi-tool, matches), special needs items"
+  };
+
+  const topicDetails = selected.map(t => topicMap[t]).filter(Boolean).join('\n\n');
+
+  const prompt = `Create a comprehensive, well-organized study cheat sheet for a geography/earth science unit test. Include ONLY these topics:\n\n${topicDetails}\n\nFormat the sheet with clear HTML using <h2> for main sections, <h3> for sub-sections, <ul>/<li> for lists, <strong> for key terms, and <p> for explanations. Make it concise but complete — a student should be able to study directly from this. Include all key facts, definitions, examples, and distinctions. Do not add any preamble or conclusion — just the study sheet content.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.map(i => i.text || '').join('') || 'Error generating content.';
+    content.innerHTML = text;
+    output.classList.add('visible');
+  } catch (err) {
+    content.innerHTML = '<p style="color:var(--rock)">Error: Could not generate study sheet. Please try again.</p>';
+    output.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>✨</span> Regenerate';
+    loading.classList.remove('active');
+  }
+}
+</script>
+</body>
+</html>
