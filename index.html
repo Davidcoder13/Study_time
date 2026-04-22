@@ -1172,5 +1172,88 @@
 </div>
 
 </main>
+</div>
+
+<script>
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggle(btn) {
+  const ans = btn.nextElementSibling;
+  ans.classList.toggle('show');
+  btn.textContent = ans.classList.contains('show') ? 'Hide Answer' : 'Reveal Answer';
+}
+
+function copySheet() {
+  const text = document.getElementById('sheet-content').innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+async function generateSheet() {
+  const checkboxes = document.querySelectorAll('.topic-checkboxes input[type=checkbox]:checked');
+  const selected = Array.from(checkboxes).map(c => c.value);
+  if (selected.length === 0) { alert('Please select at least one topic.'); return; }
+
+  const btn = document.getElementById('gen-btn');
+  const loading = document.getElementById('loading-bar');
+  const output = document.getElementById('sheet-output');
+  const content = document.getElementById('sheet-content');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Generating...';
+  loading.classList.add('active');
+  output.classList.remove('visible');
+
+  const topicMap = {
+    point_system: "Immigrant Point System: Canada's 6 selection factors with max points — Education (25), Language Skills (28, English/French, IELTS/TEF), Work Experience (15, NOC categories), Age (12, max 18-35, drops after 35), Arranged Employment (10, job offer from Canadian employer), Adaptability (10, spouse education, previous Canada study/work, relatives in Canada)",
+    pass_mark: "Immigration Pass Mark & Purpose: minimum 67/100 points to qualify; total max 100 points; economic class uses this; Express Entry Comprehensive Ranking System; Canada uses system to select economically contributing immigrants, address labour gaps, support aging population, ensure language integration",
+    pyramids: "Population Pyramids: horizontal bar graph showing age groups (cohorts, usually 5-year intervals) on vertical axis, % of population on horizontal axis, males on left, females on right. What you can read: birth rate (width of base), life expectancy (how bars narrow upward), gender imbalance (unequal sides), baby booms (wider cohorts), immigration effects (bulge in working-age), future growth (wide base = growing)",
+    pyramid_types: "4 Types of Population Pyramids: (1) Expansive — wide base, narrow top, high birth rate, high death rate, young population, fast-growing, LEDCs like Nigeria; (2) Constrictive — narrow base, wide middle, low birth rate, aging population, slow/negative growth, MEDCs like Germany/Japan/Canada; (3) Stationary — rectangular/column shape, equal widths, low birth and death rates, stable replacement-level population; (4) Baby Boom Bulge — distinct wider cohort in middle of pyramid, indicates past high-birth era, Canada's boom was 1946-1965",
+    canada_pyramid: "Canada's Population Pyramid: constrictive/aging shape with narrow base and wide middle; Baby Boom bulge in ages ~60-80 (born 1946-1965); low birth rate (~1.4 TFR, below replacement of 2.1); high life expectancy ~83 years; immigration maintains population growth; increasing dependency ratio (more seniors per working adult)",
+    key_definitions: "Key Population Definitions: Birth Rate (CBR) = live births per 1,000/year; Death Rate (CDR) = deaths per 1,000/year; Natural Increase Rate = CBR - CDR; Fertility Rate (TFR) = avg children per woman lifetime; Replacement Rate = TFR of 2.1; Life Expectancy = avg years expected to live; Infant Mortality Rate = deaths under 1 per 1,000 live births; Population Density = people per km²; Ecumene = permanently inhabited Earth; Dependency Ratio = (0-14 + 65+) / (15-64) × 100; Urbanization = rural to urban population shift; Baby Boom = period of unusually high births (Canada: 1946-1965); Baby Bust = period after boom when births dropped; Aging Population = increasing proportion of elderly",
+    migration_defs: "Migration Definitions: Immigrant = person permanently moving TO a new country; Emigrant = person permanently LEAVING their home country; Refugee = person forced to flee due to war/persecution/disaster; Push Factor = negative reason to LEAVE home country (war, poverty, famine, persecution); Pull Factor = positive reason to CHOOSE destination (jobs, safety, family, healthcare); Net Migration = immigration - emigration; Brain Drain = emigration of skilled/educated workers; Census Metropolitan Area (CMA) = urban core 100,000+ plus surrounding communities; Golden Horseshoe = densely populated region around Lake Ontario",
+    immigrant_types: "Canada's 4 Immigrant Classes: (1) Economic Class ~58% - selected via points system, Federal Skilled Worker, Skilled Trades, Canadian Experience Class (CEC), Business Immigrants, Provincial Nominee Programs (PNP); (2) Family Class ~27% - sponsored by Canadian citizen or PR, includes spouses, children, parents, grandparents, sponsor must financially support; (3) Refugee Class ~15% - Government-Assisted Refugees (GARs), Privately Sponsored Refugees, asylum seekers, Convention Refugees (recognized by UNHCR per 1951 UN Convention - persecution based on race, religion, nationality, political opinion, social group); (4) Other/Humanitarian - H&C grounds, special circumstances",
+    calculations: "Population Calculation Formulas with examples: (1) NIR = Birth Rate - Death Rate (e.g. 18-7=11 per 1,000 = 1.1%); (2) Population Growth Rate = NIR + Net Migration Rate; (3) Net Migration = Immigration rate - Emigration rate; (4) Population Density = Total Population ÷ Area in km²; (5) Doubling Time = 70 ÷ Growth Rate% (Rule of 70, e.g. 2% growth = 35 years to double); (6) Dependency Ratio = (Pop 0-14 + Pop 65+) ÷ Pop 15-64 × 100; (7) Future Population = Current Pop × (1 + growth rate)^years",
+    settlement: "Settlement Trends in Canada: Ontario receives ~50% of all immigrants, GTA is #1 destination; BC ~17% (Vancouver #2); Quebec ~17% (Montreal, French-language immigrants); Prairies ~12% (Calgary/Edmonton growing). Immigrants choose cities for: employment, established ethnic communities providing support, settlement services and ESL programs, family reunification, education, transit. Golden Horseshoe: densely populated urban region around western Lake Ontario (Toronto, Mississauga, Brampton, Hamilton, Oshawa, Burlington) - 9+ million people, Canada's most densely populated region, receives majority of Ontario's immigrants, economic hub for finance/manufacturing/tech, urban sprawl threatens farmland (Greenbelt). Historical source country shift: pre-1967 mostly European → 1967 points system removed racial discrimination → 1970s-90s surge from Asia/Caribbean → Today top sources are India, China, Philippines, Nigeria, Pakistan",
+    challenges: "Challenges Immigrants Face: (1) Foreign credential recognition — degrees/professional qualifications not always accepted in Canada; (2) Language barriers — English/French proficiency takes time, limits employment; (3) Housing costs — Toronto and Vancouver extremely expensive; (4) Discrimination — systemic barriers in hiring for visible minorities; (5) Social isolation — leaving family behind, cultural adjustment; (6) Canadian experience catch-22 — employers want Canadian experience but immigrants can't get it without a job. Rural settlement challenges: fewer services, fewer ethnic communities, employment limited → many immigrants move to cities within 5 years even after rural placement"
+  };
+
+  const topicDetails = selected.map(t => topicMap[t]).filter(Boolean).join('\n\n');
+
+  const prompt = `Create a comprehensive, well-organized study cheat sheet for an Ontario Grade 9 Geography unit test on Population and Immigration. Include ONLY these topics:\n\n${topicDetails}\n\nFormat the sheet with clear HTML using <h2> for main sections, <h3> for sub-sections, <ul>/<li> for lists, <strong> for key terms, and <p> for explanations. Make it concise but complete — a student should be able to study directly from this. Include all key facts, definitions, formulas, examples, and distinctions. Do not add any preamble or conclusion — just the study sheet content.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.map(i => i.text || '').join('') || 'Error generating content.';
+    content.innerHTML = text;
+    output.classList.add('visible');
+  } catch (err) {
+    content.innerHTML = '<p style="color:var(--pyramid)">Error generating sheet. Please try again.</p>';
+    output.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>✨</span> Regenerate';
+    loading.classList.remove('active');
+  }
+}
+</script>
 </body>
 </html>
