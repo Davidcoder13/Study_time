@@ -1,18 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-X9VVJYCWSN"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-X9VVJYCWSN');
-</script>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Unit Test Study Hub — Population & Demographics</title>
+<title>Changing Populations — Unit Test Review</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -25,12 +16,14 @@ gtag('config', 'G-X9VVJYCWSN');
     --accent3: #e85d75;
     --text: #e8eaf2;
     --muted: #8892aa;
-    --immig: #4ecdc4;
-    --pyramid: #e85d75;
-    --defs: #95e06c;
-    --calc: #5b8dee;
-    --settle: #f7a35c;
-    --types: #b388ff;
+
+    --c-demo:    #4ecdc4;
+    --c-pyramid: #e85d75;
+    --c-natural: #95e06c;
+    --c-indigenous: #f7a35c;
+    --c-migration: #b388ff;
+    --c-where:   #5b8dee;
+    --c-density: #e8c547;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -112,7 +105,7 @@ gtag('config', 'G-X9VVJYCWSN');
   nav {
     display: flex;
     gap: 4px;
-    padding: 20px 40px;
+    padding: 16px 40px;
     border-bottom: 1px solid var(--border);
     flex-wrap: wrap;
     background: var(--surface);
@@ -125,7 +118,7 @@ gtag('config', 'G-X9VVJYCWSN');
   .nav-btn {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    padding: 6px 14px;
+    padding: 6px 12px;
     border-radius: 4px;
     border: 1px solid var(--border);
     background: transparent;
@@ -136,20 +129,16 @@ gtag('config', 'G-X9VVJYCWSN');
     white-space: nowrap;
   }
 
-  .nav-btn:hover, .nav-btn.active {
-    background: var(--surface2);
-    color: var(--text);
-    border-color: var(--accent);
-  }
+  .nav-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--hov, var(--accent)); }
+  .nav-btn.active { background: var(--surface2); border-color: var(--hov, var(--accent)); color: var(--hov, var(--accent)); }
 
-  .nav-btn.active { border-color: var(--hov, var(--accent)); color: var(--hov, var(--accent)); }
-  .nav-btn[data-color="immig"] { --hov: var(--immig); }
-  .nav-btn[data-color="pyramid"] { --hov: var(--pyramid); }
-  .nav-btn[data-color="defs"] { --hov: var(--defs); }
-  .nav-btn[data-color="types"] { --hov: var(--types); }
-  .nav-btn[data-color="calc"] { --hov: var(--calc); }
-  .nav-btn[data-color="settle"] { --hov: var(--settle); }
-  .nav-btn[data-color="sheet"] { --hov: var(--accent); }
+  .nav-btn[data-c="demo"]      { --hov: var(--c-demo); }
+  .nav-btn[data-c="pyramid"]   { --hov: var(--c-pyramid); }
+  .nav-btn[data-c="natural"]   { --hov: var(--c-natural); }
+  .nav-btn[data-c="indigenous"]{ --hov: var(--c-indigenous); }
+  .nav-btn[data-c="migration"] { --hov: var(--c-migration); }
+  .nav-btn[data-c="where"]     { --hov: var(--c-where); }
+  .nav-btn[data-c="density"]   { --hov: var(--c-density); }
 
   main { padding: 40px; max-width: 1100px; margin: 0 auto; }
 
@@ -176,19 +165,8 @@ gtag('config', 'G-X9VVJYCWSN');
     flex-shrink: 0;
   }
 
-  .sec-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-
-  .sec-sub {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 2px;
-    letter-spacing: 0.06em;
-  }
+  .sec-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; }
+  .sec-sub { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: 0.06em; }
 
   .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 28px; }
 
@@ -207,17 +185,17 @@ gtag('config', 'G-X9VVJYCWSN');
     position: absolute;
     top: 0; left: 0; right: 0;
     height: 3px;
-    background: var(--card-accent, var(--accent));
+    background: var(--ca, var(--accent));
   }
 
-  .card:hover { transform: translateY(-2px); border-color: var(--card-accent, var(--accent)); }
+  .card:hover { transform: translateY(-2px); border-color: var(--ca, var(--accent)); }
 
   .card-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
     margin-bottom: 14px;
-    color: var(--card-accent, var(--accent));
+    color: var(--ca, var(--accent));
   }
 
   .card ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
@@ -242,7 +220,7 @@ gtag('config', 'G-X9VVJYCWSN');
 
   .card p { font-size: 13.5px; color: var(--text); line-height: 1.6; }
 
-  .highlight { color: var(--accent); font-weight: 500; }
+  em, .hl { color: var(--ca, var(--accent)); font-style: normal; font-weight: 500; }
 
   .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 24px; }
 
@@ -260,13 +238,7 @@ gtag('config', 'G-X9VVJYCWSN');
     border-bottom: 1px solid var(--border);
   }
 
-  td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-    line-height: 1.5;
-  }
-
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--surface2); }
 
@@ -313,7 +285,20 @@ gtag('config', 'G-X9VVJYCWSN');
 
   .quiz-ans.show { display: block; animation: fadeUp 0.2s ease; }
 
-  /* ---- PYRAMID DIAGRAM ---- */
+  /* ---- info block ---- */
+  .info-block {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    border-left: 3px solid var(--ca, var(--accent));
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+
+  .info-block strong { color: var(--ca, var(--accent)); }
+
+  /* ---- pyramid diagram ---- */
   .pyramid-wrap {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -324,256 +309,118 @@ gtag('config', 'G-X9VVJYCWSN');
 
   .pyramid-title {
     font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    color: var(--pyramid);
-    margin-bottom: 20px;
+    color: var(--c-pyramid);
+    margin-bottom: 16px;
     text-align: center;
   }
 
-  .pyramid-grid {
+  .pyr-grid {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 4px 0;
+    gap: 3px 0;
     align-items: center;
-    max-width: 580px;
-    margin: 0 auto 20px;
+    max-width: 520px;
+    margin: 0 auto 12px;
   }
 
-  .bar-left {
-    height: 22px;
-    background: linear-gradient(to left, var(--pyramid), rgba(232,93,117,0.4));
-    border-radius: 3px 0 0 3px;
-    justify-self: end;
-  }
+  .bl { height: 20px; background: linear-gradient(to left, var(--c-pyramid), rgba(232,93,117,0.35)); border-radius: 3px 0 0 3px; justify-self: end; }
+  .br { height: 20px; background: linear-gradient(to right, var(--accent2), rgba(91,141,238,0.35)); border-radius: 0 3px 3px 0; justify-self: start; }
+  .bl2 { height: 20px; background: linear-gradient(to left, var(--c-natural), rgba(149,224,108,0.35)); border-radius: 3px 0 0 3px; justify-self: end; }
+  .br2 { height: 20px; background: linear-gradient(to right, var(--c-natural), rgba(149,224,108,0.35)); border-radius: 0 3px 3px 0; justify-self: start; }
 
-  .bar-right {
-    height: 22px;
-    background: linear-gradient(to right, var(--accent2), rgba(91,141,238,0.4));
-    border-radius: 0 3px 3px 0;
-    justify-self: start;
-  }
+  .bl-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-align: center; padding: 0 6px; white-space: nowrap; }
 
-  .bar-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    padding: 0 8px;
-    white-space: nowrap;
-  }
+  .pyr-legend { display: flex; justify-content: center; gap: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  .ldot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
 
-  .pyramid-legend {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 20px;
-  }
+  .pyr-types-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
 
-  .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
-
-  .pyramid-types {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
-  }
-
-  .pyramid-type-card {
+  .ptype-card {
     background: var(--surface2);
     border-radius: 8px;
     padding: 14px;
     border: 1px solid var(--border);
   }
 
-  .pyramid-type-card strong {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--pyramid);
-    display: block;
-    margin-bottom: 6px;
-    letter-spacing: 0.06em;
+  .ptype-card strong { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--c-pyramid); display: block; margin-bottom: 6px; letter-spacing: 0.05em; }
+  .ptype-card p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+  /* timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content:''; position:absolute; left:6px; top:0; bottom:0; width:2px; background: var(--border); border-radius:2px; }
+  .tl-item { position:relative; margin-bottom:18px; }
+  .tl-item::before { content:''; position:absolute; left:-24px; top:6px; width:10px; height:10px; border-radius:50%; background: var(--ca, var(--accent)); border: 2px solid var(--bg); }
+  .tl-item strong { font-size:13px; color: var(--ca, var(--text)); display:block; margin-bottom:3px; }
+  .tl-item p { font-size:12.5px; color: var(--muted); line-height:1.5; }
+
+  /* adv/dis table */
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+  .compare-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
   }
 
-  .pyramid-type-card p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+  .compare-box .compare-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
 
-  /* POINT SYSTEM TABLE */
-  .points-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .points-table th { background: var(--surface2); padding: 10px 14px; text-align: left; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); }
-  .points-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.4; }
-  .points-table tr:last-child td { border-bottom: none; }
-  .points-table tr:hover td { background: var(--surface2); }
-  .pts-badge { display: inline-block; background: var(--immig); color: var(--bg); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 3px; }
-  .pts-max { display: inline-block; background: var(--accent); color: var(--bg); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 3px; margin-left: 6px; }
+  .compare-box ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .compare-box li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.4; }
+  .compare-box li::before { content: '✓'; position:absolute; left:0; font-size:10px; top:2px; }
 
-  /* FORMULA CARDS */
-  .formula-card {
+  .col-green .compare-title { color: var(--c-natural); }
+  .col-green li::before { color: var(--c-natural); }
+  .col-red .compare-title { color: var(--c-pyramid); }
+  .col-red li::before { content: '✗'; color: var(--c-pyramid); }
+
+  /* settlement patterns visual */
+  .settle-patterns { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
+  .sp-card {
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 16px 20px;
-    margin-bottom: 12px;
+    padding: 16px;
+    text-align: center;
   }
+  .sp-icon { font-size: 28px; margin-bottom: 8px; }
+  .sp-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--c-where); margin-bottom: 6px; }
+  .sp-desc { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 
-  .formula-card .formula-name {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--calc);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
+  /* points table */
+  .pts-max { display: inline-block; background: var(--accent); color: var(--bg); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 3px; }
 
-  .formula-box {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: var(--accent);
-    margin: 8px 0;
-  }
-
-  .formula-card .formula-note { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-top: 6px; }
-
-  /* SETTLEMENT MAP */
-  .settlement-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-
-  /* STUDY SHEET */
-  .sheet-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 28px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 28px;
-  }
-
-  .sheet-controls h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--accent); }
-
-  .topic-checkboxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 10px;
-  }
-
-  .chk-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    transition: border-color 0.2s;
-  }
-
-  .chk-label:hover { border-color: var(--accent); }
-  .chk-label input[type=checkbox] { accent-color: var(--accent); width: 14px; height: 14px; }
-
-  .gen-btn {
-    align-self: flex-start;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    padding: 12px 28px;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    transition: opacity 0.2s, transform 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .gen-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .loading-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; display: none; }
-  .loading-bar.active { display: block; }
-  .loading-bar-inner { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); animation: loadPulse 1.5s infinite; }
-
-  @keyframes loadPulse {
-    0% { width: 0%; margin-left: 0; }
-    50% { width: 60%; }
-    100% { width: 0%; margin-left: 100%; }
-  }
-
-  #sheet-output {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 36px;
-    font-size: 13.5px;
-    line-height: 1.7;
-    display: none;
-    position: relative;
-  }
-
-  #sheet-output.visible { display: block; animation: fadeUp 0.4s ease; }
-
-  .copy-btn {
-    position: absolute;
-    top: 16px; right: 16px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    padding: 6px 12px;
+  /* indigenous bands */
+  .indig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .indig-card {
     background: var(--surface2);
     border: 1px solid var(--border);
-    color: var(--muted);
-    border-radius: 4px;
-    cursor: pointer;
-    letter-spacing: 0.06em;
-    transition: all 0.2s;
+    border-radius: 8px;
+    padding: 18px;
+    border-top: 3px solid var(--c-indigenous);
   }
-
-  .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .sheet-rendered { white-space: normal; font-family: 'DM Sans', sans-serif; }
-  .sheet-rendered h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--accent); margin: 24px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
-  .sheet-rendered h3 { font-size: 1rem; color: var(--accent2); margin: 16px 0 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
-  .sheet-rendered p { margin-bottom: 10px; color: var(--text); }
-  .sheet-rendered ul { padding-left: 20px; margin-bottom: 10px; }
-  .sheet-rendered li { margin-bottom: 5px; color: var(--text); }
-  .sheet-rendered strong { color: var(--accent); }
-
-  /* COLORS PER SECTION */
-  .immig-color { --card-accent: var(--immig); }
-  .pyramid-color { --card-accent: var(--pyramid); }
-  .defs-color { --card-accent: var(--defs); }
-  .types-color { --card-accent: var(--types); }
-  .calc-color { --card-accent: var(--calc); }
-  .settle-color { --card-accent: var(--settle); }
-
-  .timeline { position: relative; padding-left: 32px; }
-  .timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background: var(--border); border-radius:2px; }
-  .tl-item { position:relative; margin-bottom:20px; }
-  .tl-item::before { content:''; position:absolute; left:-28px; top:6px; width:10px; height:10px; border-radius:50%; background: var(--card-accent, var(--accent)); border: 2px solid var(--bg); }
-  .tl-item strong { font-size:13px; color: var(--card-accent, var(--text)); display:block; margin-bottom:3px; }
-  .tl-item p { font-size:12.5px; color: var(--muted); line-height:1.5; }
+  .indig-card .indig-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--c-indigenous); font-weight: 700; margin-bottom: 10px; }
+  .indig-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .indig-card li { font-size: 12.5px; color: var(--muted); padding-left: 12px; position: relative; line-height: 1.4; }
+  .indig-card li::before { content: '·'; position:absolute; left:0; color: var(--c-indigenous); font-size: 14px; line-height: 1.2; }
 
   @media (max-width: 640px) {
     header { padding: 28px 20px 20px; }
     nav { padding: 12px 20px; }
     main { padding: 24px 20px; }
     .cards-grid { grid-template-columns: 1fr; }
+    .compare-grid { grid-template-columns: 1fr; }
+    .indig-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -581,569 +428,765 @@ gtag('config', 'G-X9VVJYCWSN');
 <div class="page-wrap">
 
 <header>
-  <div class="header-left">
+  <div>
     <div class="badge">📚 Study Hub</div>
-    <h1>Unit Test<br><span>Review Guide</span></h1>
-    <p class="subtitle">// population · immigration · demographics · settlement</p>
+    <h1>Changing<br><span>Populations</span></h1>
+    <p class="subtitle">// demography · pyramids · migration · settlement · density</p>
   </div>
-  <div class="header-right">
-    <div class="unit-chip">GRADE 9 · ONTARIO GEOGRAPHY</div>
-  </div>
+  <div class="unit-chip">GRADE 9 · ONTARIO GEOGRAPHY</div>
 </header>
 
 <nav>
-  <button class="nav-btn active" data-color="immig" onclick="show('immig', this)">📋 Point System</button>
-  <button class="nav-btn" data-color="pyramid" onclick="show('pyramid', this)">📊 Population Pyramids</button>
-  <button class="nav-btn" data-color="defs" onclick="show('defs', this)">📖 Definitions</button>
-  <button class="nav-btn" data-color="types" onclick="show('types', this)">✈️ Immigrant Types</button>
-  <button class="nav-btn" data-color="calc" onclick="show('calc', this)">🔢 Calculations</button>
-  <button class="nav-btn" data-color="settle" onclick="show('settle', this)">🏙 Settlement Trends</button>
-  <button class="nav-btn" data-color="sheet" onclick="show('sheet', this)">✨ Study Sheet</button>
+  <button class="nav-btn active" data-c="demo"       onclick="show('demo',this)">🔬 Demography & Census</button>
+  <button class="nav-btn"        data-c="pyramid"    onclick="show('pyramid',this)">📊 Pyramids</button>
+  <button class="nav-btn"        data-c="natural"    onclick="show('natural',this)">🌱 Natural Increase</button>
+  <button class="nav-btn"        data-c="indigenous" onclick="show('indigenous',this)">🍁 Indigenous Peoples</button>
+  <button class="nav-btn"        data-c="migration"  onclick="show('migration',this)">✈️ Migration</button>
+  <button class="nav-btn"        data-c="where"      onclick="show('where',this)">🏙️ Where People Live</button>
+  <button class="nav-btn"        data-c="density"    onclick="show('density',this)">📍 Population Density</button>
 </nav>
 
 <main>
 
-<!-- ============ IMMIGRANT POINT SYSTEM ============ -->
-<div class="section active" id="immig">
+<!-- =========== DEMOGRAPHY & CENSUS =========== -->
+<div class="section active" id="demo">
   <div class="sec-head">
-    <div class="sec-icon" style="background: rgba(78,205,196,0.12); color: var(--immig);">📋</div>
+    <div class="sec-icon" style="background:rgba(78,205,196,0.12);color:var(--c-demo)">🔬</div>
     <div>
-      <div class="sec-title" style="color: var(--immig)">Immigrant Point System</div>
-      <div class="sec-sub">// federal skilled worker · selection factors · pass mark</div>
+      <div class="sec-title" style="color:var(--c-demo)">Demography &amp; the Census</div>
+      <div class="sec-sub">// what is demography · why it matters · census basics</div>
     </div>
-  </div>
-
-  <div class="card immig-color" style="margin-bottom: 24px;">
-    <div class="card-title">What Is the Point System?</div>
-    <p>Canada uses a <span class="highlight">points-based (Express Entry) system</span> to select economic immigrants. Applicants are scored out of <span class="highlight">100 points</span> across six categories. The pass mark is typically <span class="highlight">67 points</span> to be eligible. The system is designed to admit immigrants who will contribute economically to Canada.</p>
-  </div>
-
-  <div class="table-wrap" style="margin-bottom: 24px;">
-    <table class="points-table">
-      <thead>
-        <tr>
-          <th>Selection Factor</th>
-          <th>Max Points</th>
-          <th>Key Details</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong style="color:var(--immig)">① Education</strong></td>
-          <td><span class="pts-max">25 pts</span></td>
-          <td>Higher education = more points. PhD/Master's = 25, Bachelor's = 20, high school only = 5. Canadian credentials valued highly.</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--immig)">② Language Skills</strong></td>
-          <td><span class="pts-max">28 pts</span></td>
-          <td>Official languages (English & French). Tested via IELTS (English) or TEF (French). Higher fluency = more points. First language: up to 24 pts. Second: up to 4 pts.</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--immig)">③ Work Experience</strong></td>
-          <td><span class="pts-max">15 pts</span></td>
-          <td>Skilled work in NOC (National Occupational Classification) categories. More years = more points. Must be within last 10 years.</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--immig)">④ Age</strong></td>
-          <td><span class="pts-max">12 pts</span></td>
-          <td>Maximum points at ages 18–35. Points decrease after 35, reaching 0 at age 47+. Younger workers contribute longer to economy.</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--immig)">⑤ Arranged Employment</strong></td>
-          <td><span class="pts-max">10 pts</span></td>
-          <td>Having a valid, full-time job offer from a Canadian employer. Significantly boosts score.</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--immig)">⑥ Adaptability</strong></td>
-          <td><span class="pts-max">10 pts</span></td>
-          <td>Factors like: spouse's education or language, previous study/work in Canada, having relatives in Canada, arranged employment.</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 
   <div class="cards-grid">
-    <div class="card immig-color">
-      <div class="card-title">Pass Mark & How It Works</div>
-      <ul>
-        <li>Minimum score to qualify: <span class="highlight">67 out of 100</span></li>
-        <li>Total maximum points: <span class="highlight">100 points</span></li>
-        <li>Economic class applicants use this system</li>
-        <li>Does not guarantee entry — candidates are ranked in a pool and top-scoring candidates receive Invitations to Apply (ITAs)</li>
-        <li>Comprehensive Ranking System (CRS) score used in Express Entry draw</li>
+    <div class="card" style="--ca:var(--c-demo)">
+      <div class="card-title">What Is Demography?</div>
+      <p><em>Demography</em> is the <em>scientific study of human populations</em> — including their size, structure, distribution, and how they change over time through births, deaths, and migration.</p>
+      <br>
+      <p><strong style="color:var(--c-demo)">Why Is It Important?</strong></p>
+      <ul style="margin-top:10px">
+        <li>Helps governments <em>plan services</em> — schools, hospitals, roads, housing</li>
+        <li>Predicts future <em>labour market needs</em> and shortages</li>
+        <li>Informs <em>immigration policy</em> (how many people Canada needs)</li>
+        <li>Helps understand <em>aging populations</em> and pension pressures</li>
+        <li>Used by businesses to target markets and plan locations</li>
+        <li>Allows comparison of well-being between countries (HDI, poverty)</li>
       </ul>
     </div>
-    <div class="card immig-color">
-      <div class="card-title">Why Canada Uses This System</div>
+
+    <div class="card" style="--ca:var(--c-demo)">
+      <div class="card-title">What Is a Census?</div>
       <ul>
-        <li>Selects immigrants most likely to <span class="highlight">succeed economically</span></li>
-        <li>Addresses <span class="highlight">labour market gaps</span> and skill shortages</li>
-        <li>Supports an <span class="highlight">aging population</span> — younger workers pay taxes and support social programs</li>
-        <li>Language skills ensure better <span class="highlight">integration</span> into Canadian society</li>
-        <li>Provides a fair, transparent, objective selection process</li>
+        <li>An <em>official count of every person</em> living in a country at a specific point in time</li>
+        <li>Canada conducts a census every <em>5 years</em> (Statistics Canada)</li>
+        <li>Collects data on: age, gender, language, income, education, housing, ethnicity, immigration status</li>
+        <li>Every household is <em>legally required</em> to respond</li>
+        <li>Canada's census is one of the most detailed in the world</li>
+      </ul>
+      <br>
+      <p><strong style="color:var(--c-demo)">Why Is It Important?</strong></p>
+      <ul style="margin-top:10px">
+        <li>Governments use it to <em>allocate funding</em> (more people = more funding for that region)</li>
+        <li>Determines how many seats each province gets in Parliament</li>
+        <li>Helps track <em>trends over time</em> — aging, urbanization, diversity</li>
+        <li>Essential for planning schools, transit, healthcare facilities</li>
       </ul>
     </div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: Why does Canada give points for "Age" in the immigration system? Why are younger applicants favoured?</div>
+    <div class="quiz-q">Q: Why is demography important for Canada's government?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Younger immigrants have a longer working life ahead of them, meaning they will pay taxes and contribute to the economy for more years. Canada's aging population means there are more retirees drawing on government services (pensions, healthcare), so younger immigrants help offset this by paying into the system. Applicants aged 18–35 receive maximum points because they are at the start of their careers.</div>
+    <div class="quiz-ans">Demography helps the government understand who lives in Canada now and predict what the population will look like in the future. This is critical for planning — building enough schools for children, hospitals for seniors, allocating funding fairly, and deciding how many immigrants Canada needs to sustain its workforce and economy as the population ages.</div>
   </div>
+
   <div class="quiz-box">
-    <div class="quiz-q">Q: An applicant has a university degree, intermediate English, 3 years experience, is 42 years old, and has no job offer. Estimate their approximate category scores and whether they'd likely pass.</div>
+    <div class="quiz-q">Q: What is a census, and why does Canada conduct one every 5 years?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans"><strong>Rough estimate:</strong> Education (university) ~20/25 · Language (intermediate) ~15/28 · Work Experience (3 yrs) ~11/15 · Age (42) ~6/12 · Employment (none) ~0/10 · Adaptability ~3/10 → <strong>Approx. 55/100</strong> — this is <strong>below</strong> the 67-point pass mark. They would need to improve language scores, or obtain a job offer to have a realistic chance.</div>
+    <div class="quiz-ans">A census is an official count and survey of every person in the country at a single point in time. Canada conducts one every 5 years because populations change — people are born, die, move, and immigrate — and governments need current, accurate data to make good decisions about funding, services, and policy. Without the census, governments would have to guess how many people need roads, hospitals, and schools.</div>
   </div>
 </div>
 
-<!-- ============ POPULATION PYRAMIDS ============ -->
+<!-- =========== POPULATION PYRAMIDS =========== -->
 <div class="section" id="pyramid">
   <div class="sec-head">
-    <div class="sec-icon" style="background: rgba(232,93,117,0.12); color: var(--pyramid);">📊</div>
+    <div class="sec-icon" style="background:rgba(232,93,117,0.12);color:var(--c-pyramid)">📊</div>
     <div>
-      <div class="sec-title" style="color: var(--pyramid)">Population Pyramids</div>
-      <div class="sec-sub">// how to read · 4 types · what each reveals</div>
+      <div class="sec-title" style="color:var(--c-pyramid)">Population Pyramids</div>
+      <div class="sec-sub">// how to read · stationary vs expansive · dependency load · baby boom/echo</div>
     </div>
   </div>
 
-  <!-- Interactive Pyramid Diagram -->
+  <!-- Side-by-side pyramid comparison -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
+    <!-- Expansive -->
+    <div class="pyramid-wrap" style="padding:20px">
+      <div class="pyramid-title">① EXPANSIVE Pyramid</div>
+      <div class="pyr-legend">
+        <span><span class="ldot" style="background:var(--c-pyramid)"></span>Male</span>
+        <span><span class="ldot" style="background:var(--accent2)"></span>Female</span>
+      </div>
+      <div class="pyr-grid" style="max-width:360px;margin:0 auto 8px">
+        <div class="bl" style="width:14px"></div><div class="bl-label">75+</div><div class="br" style="width:16px"></div>
+        <div class="bl" style="width:18px"></div><div class="bl-label">70–74</div><div class="br" style="width:20px"></div>
+        <div class="bl" style="width:26px"></div><div class="bl-label">65–69</div><div class="br" style="width:28px"></div>
+        <div class="bl" style="width:36px"></div><div class="bl-label">60–64</div><div class="br" style="width:36px"></div>
+        <div class="bl" style="width:50px"></div><div class="bl-label">55–59</div><div class="br" style="width:50px"></div>
+        <div class="bl" style="width:64px"></div><div class="bl-label">50–54</div><div class="br" style="width:62px"></div>
+        <div class="bl" style="width:76px"></div><div class="bl-label">45–49</div><div class="br" style="width:74px"></div>
+        <div class="bl" style="width:88px"></div><div class="bl-label">40–44</div><div class="br" style="width:86px"></div>
+        <div class="bl" style="width:98px"></div><div class="bl-label">35–39</div><div class="br" style="width:96px"></div>
+        <div class="bl" style="width:108px"></div><div class="bl-label">30–34</div><div class="br" style="width:106px"></div>
+        <div class="bl" style="width:118px"></div><div class="bl-label">25–29</div><div class="br" style="width:114px"></div>
+        <div class="bl" style="width:126px"></div><div class="bl-label">20–24</div><div class="br" style="width:122px"></div>
+        <div class="bl" style="width:132px"></div><div class="bl-label">15–19</div><div class="br" style="width:128px"></div>
+        <div class="bl" style="width:136px"></div><div class="bl-label">10–14</div><div class="br" style="width:132px"></div>
+        <div class="bl" style="width:140px"></div><div class="bl-label">5–9</div><div class="br" style="width:136px"></div>
+        <div class="bl" style="width:142px"></div><div class="bl-label">0–4</div><div class="br" style="width:140px"></div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:8px">Wide base → high birth rate<br>Narrow top → high death rate / low life expectancy<br><span style="color:var(--c-pyramid)">Typical: LEDCs (Nigeria, Afghanistan)</span></p>
+    </div>
+    <!-- Stationary -->
+    <div class="pyramid-wrap" style="padding:20px">
+      <div class="pyramid-title" style="color:var(--c-natural)">② STATIONARY Pyramid</div>
+      <div class="pyr-legend">
+        <span><span class="ldot" style="background:var(--c-natural)"></span>Male</span>
+        <span><span class="ldot" style="background:var(--c-natural)"></span>Female</span>
+      </div>
+      <div class="pyr-grid" style="max-width:360px;margin:0 auto 8px">
+        <div class="bl2" style="width:50px"></div><div class="bl-label">75+</div><div class="br2" style="width:58px"></div>
+        <div class="bl2" style="width:72px"></div><div class="bl-label">70–74</div><div class="br2" style="width:74px"></div>
+        <div class="bl2" style="width:82px"></div><div class="bl-label">65–69</div><div class="br2" style="width:82px"></div>
+        <div class="bl2" style="width:90px"></div><div class="bl-label">60–64</div><div class="br2" style="width:90px"></div>
+        <div class="bl2" style="width:94px"></div><div class="bl-label">55–59</div><div class="br2" style="width:94px"></div>
+        <div class="bl2" style="width:98px"></div><div class="bl-label">50–54</div><div class="br2" style="width:96px"></div>
+        <div class="bl2" style="width:100px"></div><div class="bl-label">45–49</div><div class="br2" style="width:100px"></div>
+        <div class="bl2" style="width:102px"></div><div class="bl-label">40–44</div><div class="br2" style="width:100px"></div>
+        <div class="bl2" style="width:104px"></div><div class="bl-label">35–39</div><div class="br2" style="width:102px"></div>
+        <div class="bl2" style="width:106px"></div><div class="bl-label">30–34</div><div class="br2" style="width:104px"></div>
+        <div class="bl2" style="width:106px"></div><div class="bl-label">25–29</div><div class="br2" style="width:104px"></div>
+        <div class="bl2" style="width:106px"></div><div class="bl-label">20–24</div><div class="br2" style="width:104px"></div>
+        <div class="bl2" style="width:104px"></div><div class="bl-label">15–19</div><div class="br2" style="width:102px"></div>
+        <div class="bl2" style="width:104px"></div><div class="bl-label">10–14</div><div class="br2" style="width:102px"></div>
+        <div class="bl2" style="width:104px"></div><div class="bl-label">5–9</div><div class="br2" style="width:102px"></div>
+        <div class="bl2" style="width:104px"></div><div class="bl-label">0–4</div><div class="br2" style="width:102px"></div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:8px">Nearly equal bars throughout → stable population<br>Low birth rate, low death rate, long life expectancy<br><span style="color:var(--c-natural)">Typical: MEDCs (Sweden, Canada)</span></p>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" style="--ca:var(--c-pyramid)">
+      <div class="card-title">What the Pyramid Shape Tells You</div>
+      <ul>
+        <li><em>Wide base (0–14):</em> high birth rate → fast-growing, young population</li>
+        <li><em>Narrow top (65+):</em> high death rate → short life expectancy</li>
+        <li><em>Even/wide top:</em> low death rate → long life expectancy, aging population</li>
+        <li><em>Narrow middle:</em> past wars or emigration reduced that generation</li>
+        <li><em>Bulge in working age (20–40):</em> large immigration wave into that country</li>
+        <li><em>Gender imbalance:</em> wars kill more males → bars unequal on left vs right</li>
+        <li><em>Future growth:</em> wide base = population will grow; narrow base = will shrink</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-pyramid)">
+      <div class="card-title">Dependency Load (Dependency Ratio)</div>
+      <p>The <em>dependency load</em> is the proportion of the population that is <em>not working</em> (dependents) compared to those who are working (supporters).</p>
+      <br>
+      <ul>
+        <li><em>Dependents</em> = children (0–14) + seniors (65+)</li>
+        <li><em>Workers</em> = people aged 15–64</li>
+        <li>High dependency = more strain on working population (more taxes needed)</li>
+        <li>Canada's aging baby boomers are <em>increasing the dependency load</em></li>
+        <li>More seniors per worker → pressure on pensions, healthcare, social programs</li>
+        <li>Immigration helps by adding working-age people to Canada's workforce</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-pyramid); grid-column: 1 / -1;">
+      <div class="card-title">Baby Boom &amp; Baby Boom Echo</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px">
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-pyramid);margin-bottom:8px;letter-spacing:0.05em">BABY BOOM (1946–1965)</p>
+          <ul>
+            <li>Surge of births <em>after World War II</em> — soldiers returned home, families reunited</li>
+            <li>Lasted ~20 years; unusually <em>high birth rates</em> across North America</li>
+            <li>Boomers now aged ~60–79 — <em>aging out</em> of workforce, retiring</li>
+            <li>Shows up as a <em>wide bulge in the middle</em> of Canada's pyramid</li>
+            <li>Creating pressure on healthcare, CPP, and OAS pension systems</li>
+          </ul>
+        </div>
+        <div>
+          <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent2);margin-bottom:8px;letter-spacing:0.05em">BABY BOOM ECHO (1980s–1995)</p>
+          <ul>
+            <li>The children of Baby Boomers — a <em>second, smaller surge</em> in births</li>
+            <li>Also called "Echo Boomers" or Millennials</li>
+            <li>Visible as a <em>secondary bulge</em> slightly below the boom bulge</li>
+            <li>Smaller than the original boom because each Boomer had fewer kids</li>
+            <li>Now aged ~30–45 — the <em>core of today's workforce</em></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: A pyramid has a very wide base and a narrow top. What type of pyramid is this, and what does it tell you about the country?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">This is an <strong>Expansive pyramid</strong>. The wide base means a <strong>high birth rate</strong> — many children are being born. The narrow top means a <strong>high death rate and low life expectancy</strong> — few people survive to old age. The population is <strong>young and growing rapidly</strong>. This is typical of Less Economically Developed Countries (LEDCs) where healthcare is limited and families have many children.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: What is the dependency load, and why is it increasing in Canada?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">The dependency load is the ratio of non-working people (children 0–14 and seniors 65+) to working-age people (15–64). It is increasing in Canada because the Baby Boomers (born 1946–1965) are now retiring, creating a large wave of seniors who no longer work and who rely on pensions and healthcare. At the same time, Canada's birth rate is low (below replacement level), so there are fewer young people entering the workforce to support them. This means fewer workers are paying taxes to fund more services for more dependents.</div>
+  </div>
+</div>
+
+<!-- =========== NATURAL INCREASE =========== -->
+<div class="section" id="natural">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:rgba(149,224,108,0.12);color:var(--c-natural)">🌱</div>
+    <div>
+      <div class="sec-title" style="color:var(--c-natural)">Natural Increase</div>
+      <div class="sec-sub">// trends in Canada · fertility rate · baby boom impacts · aging population</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" style="--ca:var(--c-natural)">
+      <div class="card-title">Natural Increase — Canadian Trends</div>
+      <ul>
+        <li><em>Natural Increase = Birth Rate − Death Rate</em></li>
+        <li>Canada's natural increase has been <em>declining</em> for decades</li>
+        <li>Birth rate has fallen steadily since the post-WWII baby boom</li>
+        <li>Canada's current fertility rate (~1.4) is <em>below replacement level</em> (2.1)</li>
+        <li>This means Canada <em>cannot grow naturally</em> — deaths will eventually exceed births without immigration</li>
+        <li>Canada relies heavily on <em>immigration</em> to maintain population growth</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-natural)">
+      <div class="card-title">Fertility Rate — Definition &amp; Trend</div>
+      <p>The <em>fertility rate (TFR)</em> is the average number of children a woman is expected to have over her lifetime.</p>
+      <br>
+      <ul>
+        <li><em>Replacement rate = 2.1</em> children per woman (needed to keep population stable)</li>
+        <li>Canada's current TFR ≈ <em>1.4</em> — well below replacement</li>
+        <li><strong style="color:var(--c-natural)">Why is it declining?</strong></li>
+        <li>Women pursuing higher education and careers → having children later (or not at all)</li>
+        <li>High cost of living, housing, and childcare</li>
+        <li>Shift from rural (children = labour) to urban (children = expense) lifestyle</li>
+        <li>Greater access to contraception and family planning</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-natural)">
+      <div class="card-title">Impacts of the Baby Boom &amp; Aging Population</div>
+      <ul>
+        <li>Baby Boomers (born 1946–1965) are now <em>retiring in large waves</em></li>
+        <li>More retirees drawing on <em>Canada Pension Plan (CPP)</em> and healthcare</li>
+        <li>Fewer workers paying into social programs → <em>financial strain</em></li>
+        <li>Demand for <em>seniors services</em> — long-term care homes, hospitals — increasing rapidly</li>
+        <li>Many skilled Boomers leaving the workforce creates <em>labour shortages</em> (e.g., nursing, trades)</li>
+        <li>Government increasing immigration targets to fill workforce gaps</li>
+        <li>Growing strain on younger generations (Echo Boomers / Millennials) who must support more retirees</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-natural)">
+      <div class="card-title">Why Canada Needs Immigration</div>
+      <ul>
+        <li>Natural increase alone is <em>insufficient</em> to grow the population</li>
+        <li>Without immigration, workforce would <em>shrink</em> as boomers retire</li>
+        <li>Immigration brings <em>younger, working-age people</em> who pay taxes</li>
+        <li>Helps fill <em>skilled labour gaps</em> in healthcare, tech, trades</li>
+        <li>Contributes to <em>economic growth</em> — immigrants start businesses, spend money</li>
+        <li>Canada's immigration target: ~500,000 per year by 2025</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: What is the fertility rate, and what is the trend in Canada? Why does this matter?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">The <strong>fertility rate (TFR)</strong> is the average number of children a woman will have in her lifetime. Canada's current TFR is approximately <strong>1.4</strong>, which is well below the <strong>replacement rate of 2.1</strong>. This means that without immigration, Canada's population would eventually start declining. The trend is driven by women pursuing education and careers, the high cost of raising children in cities, and shifting cultural values. This matters because a shrinking population means fewer workers, less tax revenue, and more pressure on social programs like healthcare and pensions.</div>
+  </div>
+</div>
+
+<!-- =========== INDIGENOUS PEOPLES =========== -->
+<div class="section" id="indigenous">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:rgba(247,163,92,0.12);color:var(--c-indigenous)">🍁</div>
+    <div>
+      <div class="sec-title" style="color:var(--c-indigenous)">Canada's Indigenous Population</div>
+      <div class="sec-sub">// First Nations · Métis · Inuit · key facts</div>
+    </div>
+  </div>
+
+  <div class="indig-grid">
+    <div class="indig-card">
+      <div class="indig-name">First Nations</div>
+      <ul>
+        <li>Largest Indigenous group in Canada</li>
+        <li>Over <em>630 recognized First Nations communities</em></li>
+        <li>Live on-reserve and off-reserve (cities)</li>
+        <li>Diverse — hundreds of distinct nations, languages, cultures</li>
+        <li>Governed by the <em>Indian Act</em> (a federal law, often criticized)</li>
+        <li>Examples: Ojibwe, Cree, Mohawk, Mi'kmaq, Haida</li>
+      </ul>
+    </div>
+    <div class="indig-card">
+      <div class="indig-name">Métis</div>
+      <ul>
+        <li>People of <em>mixed Indigenous and European ancestry</em></li>
+        <li>Emerged through relationships between First Nations women and European (mainly French) fur traders</li>
+        <li>Distinct culture, language (Michif), and traditions</li>
+        <li>Strong historical presence in <em>western Canada</em> (Manitoba, Saskatchewan)</li>
+        <li>Led by Louis Riel — key figure in Métis resistance (Red River and Northwest Resistances)</li>
+      </ul>
+    </div>
+    <div class="indig-card">
+      <div class="indig-name">Inuit</div>
+      <ul>
+        <li>Indigenous peoples of <em>Arctic Canada</em> (Nunavut, NWT, northern Québec, Labrador)</li>
+        <li>Smallest of the three groups</li>
+        <li>Adapted to extreme northern environments</li>
+        <li>Traditional practices: hunting (seals, whales, caribou), fishing, dog sledding</li>
+        <li>Language: <em>Inuktitut</em></li>
+        <li>Nunavut (created 1999) is a self-governing Inuit territory</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" style="--ca:var(--c-indigenous)">
+      <div class="card-title">Key Population Facts</div>
+      <ul>
+        <li>Indigenous peoples make up about <em>5% of Canada's population</em></li>
+        <li>One of the <em>fastest-growing populations</em> in Canada</li>
+        <li>Young population — median age is lower than the Canadian average</li>
+        <li>About <em>60% of First Nations members live off-reserve</em>, many in cities</li>
+        <li>Winnipeg and Vancouver have some of the largest urban Indigenous populations</li>
+        <li>Indigenous population growing rapidly due to higher birth rates and improved census identification</li>
+      </ul>
+    </div>
+    <div class="card" style="--ca:var(--c-indigenous)">
+      <div class="card-title">Context &amp; Challenges</div>
+      <ul>
+        <li>Legacy of colonialism, residential schools, and loss of land</li>
+        <li>Higher rates of poverty, housing insecurity, and health issues</li>
+        <li>Ongoing land claims and treaty negotiations</li>
+        <li>Calls to Action from <em>Truth and Reconciliation Commission (TRC)</em></li>
+        <li>Growing political representation and self-governance movements</li>
+        <li>Important role in Canadian identity, culture, and environmental stewardship</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Name the three groups of Indigenous peoples in Canada and briefly describe each.</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>First Nations:</strong> The largest Indigenous group with over 630 communities and hundreds of distinct languages and cultures. They live both on-reserve and in cities across Canada.<br><br><strong>Métis:</strong> People of mixed Indigenous and European ancestry, emerging from relationships between First Nations women and European (mostly French) fur traders. They have their own distinct culture and language (Michif), with roots especially in western Canada.<br><br><strong>Inuit:</strong> Indigenous peoples of the Arctic North (Nunavut, northern Quebec, Labrador, NWT). They are adapted to extreme northern environments, speak Inuktitut, and have their own territory of Nunavut (1999).</div>
+  </div>
+</div>
+
+<!-- =========== MIGRATION =========== -->
+<div class="section" id="migration">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:rgba(179,136,255,0.12);color:var(--c-migration)">✈️</div>
+    <div>
+      <div class="sec-title" style="color:var(--c-migration)">Migration</div>
+      <div class="sec-sub">// immigration vs emigration · push/pull · 3 classes · points system</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" style="--ca:var(--c-migration)">
+      <div class="card-title">Immigration vs. Emigration</div>
+      <ul>
+        <li><em>Immigration:</em> moving <em>into</em> a country permanently — Canada is the destination</li>
+        <li><em>Emigration:</em> moving <em>out of</em> a country permanently — Canada is the origin</li>
+        <li><em>Immigrant:</em> a person who arrives in a new country to live</li>
+        <li><em>Emigrant:</em> a person who has left their home country</li>
+        <li><em>Net Migration:</em> Immigration − Emigration = the net gain or loss of people</li>
+        <li>Canada gains far more immigrants than it loses emigrants → positive net migration</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-migration)">
+      <div class="card-title">Immigration Trends in Canada</div>
+      <ul>
+        <li>Canada accepts ~400,000–500,000 immigrants per year (one of the highest rates per capita in the world)</li>
+        <li>Before 1967: most immigrants came from <em>Europe</em> (UK, Italy, Germany, Ukraine)</li>
+        <li>After 1967 points system: opened to all countries equally → shift toward Asia, Caribbean, Africa</li>
+        <li>Top source countries today: <em>India, China, Philippines, Nigeria, Pakistan</em></li>
+        <li>Immigration is Canada's <em>primary source of population growth</em> (natural increase is too low)</li>
+        <li>Targets increasing to fill aging workforce gaps</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-migration)">
+      <div class="card-title">Push Factors</div>
+      <p style="margin-bottom:10px;color:var(--muted);font-size:12.5px">Negative conditions that drive people to <em>leave</em> their home country:</p>
+      <ul>
+        <li>War, armed conflict, and political instability</li>
+        <li>Political persecution or lack of freedom</li>
+        <li>Extreme poverty and unemployment</li>
+        <li>Famine, drought, or natural disasters</li>
+        <li>Lack of healthcare or educational opportunities</li>
+        <li>Religious or ethnic persecution</li>
+        <li>Environmental degradation (pollution, climate change)</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-migration)">
+      <div class="card-title">Pull Factors</div>
+      <p style="margin-bottom:10px;color:var(--muted);font-size:12.5px">Positive conditions that attract people <em>to</em> Canada:</p>
+      <ul>
+        <li>Job opportunities and strong economy</li>
+        <li>Political stability and freedom</li>
+        <li>High standard of living</li>
+        <li>Universal healthcare and social programs</li>
+        <li>Excellent education system</li>
+        <li>Family members already living in Canada</li>
+        <li>Canada's reputation as multicultural and welcoming</li>
+        <li>Safe environment, rule of law</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3 immigrant classes -->
   <div class="pyramid-wrap">
-    <div class="pyramid-title">How to Read a Population Pyramid</div>
-    <div class="pyramid-legend">
-      <span><span class="legend-dot" style="background:var(--pyramid)"></span>Male (Left)</span>
-      <span><span class="legend-dot" style="background:var(--accent2)"></span>Female (Right)</span>
-      <span style="color:var(--muted)">← Each bar = one age group (cohort), typically 5-year intervals →</span>
+    <div class="pyramid-title" style="color:var(--c-migration);margin-bottom:16px">Canada's 3 Immigration Classes</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
+      <div style="background:var(--surface2);padding:16px;border-radius:8px;border-left:3px solid var(--c-migration)">
+        <strong style="color:var(--c-migration);font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-bottom:8px">① ECONOMIC CLASS (~58%)</strong>
+        <p style="font-size:13px;line-height:1.5">Selected using the <em>points system</em>. Immigrants chosen for their ability to work and contribute economically. Includes Skilled Workers, Trades Workers, and Business Immigrants.</p>
+      </div>
+      <div style="background:var(--surface2);padding:16px;border-radius:8px;border-left:3px solid var(--c-migration)">
+        <strong style="color:var(--c-migration);font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-bottom:8px">② FAMILY CLASS (~27%)</strong>
+        <p style="font-size:13px;line-height:1.5">Sponsored by a Canadian citizen or permanent resident. Includes spouses, common-law partners, dependent children, parents, and grandparents. The sponsor must financially support the newcomer.</p>
+      </div>
+      <div style="background:var(--surface2);padding:16px;border-radius:8px;border-left:3px solid var(--c-migration)">
+        <strong style="color:var(--c-migration);font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-bottom:8px">③ REFUGEE CLASS (~15%)</strong>
+        <p style="font-size:13px;line-height:1.5">People fleeing war, persecution, or danger. Includes Government-Assisted Refugees (GARs), Privately Sponsored Refugees, and Asylum Seekers who claim protection after arriving in Canada.</p>
+      </div>
     </div>
-    <!-- Visual pyramid: Expansive type -->
-    <div style="max-width:560px;margin:0 auto 8px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px;">AGE ↑</div>
-    <div class="pyramid-grid" style="max-width:560px;margin:0 auto;">
-      <!-- 75+ -->
-      <div class="bar-left" style="width:20px"></div><div class="bar-label">75+</div><div class="bar-right" style="width:24px"></div>
-      <!-- 70-74 -->
-      <div class="bar-left" style="width:30px"></div><div class="bar-label">70–74</div><div class="bar-right" style="width:34px"></div>
-      <!-- 65-69 -->
-      <div class="bar-left" style="width:42px"></div><div class="bar-label">65–69</div><div class="bar-right" style="width:44px"></div>
-      <!-- 60-64 -->
-      <div class="bar-left" style="width:52px"></div><div class="bar-label">60–64</div><div class="bar-right" style="width:54px"></div>
-      <!-- 55-59 -->
-      <div class="bar-left" style="width:62px"></div><div class="bar-label">55–59</div><div class="bar-right" style="width:60px"></div>
-      <!-- 50-54 -->
-      <div class="bar-left" style="width:70px"></div><div class="bar-label">50–54</div><div class="bar-right" style="width:68px"></div>
-      <!-- 45-49 -->
-      <div class="bar-left" style="width:80px"></div><div class="bar-label">45–49</div><div class="bar-right" style="width:78px"></div>
-      <!-- 40-44 -->
-      <div class="bar-left" style="width:90px"></div><div class="bar-label">40–44</div><div class="bar-right" style="width:88px"></div>
-      <!-- 35-39 -->
-      <div class="bar-left" style="width:100px"></div><div class="bar-label">35–39</div><div class="bar-right" style="width:98px"></div>
-      <!-- 30-34 -->
-      <div class="bar-left" style="width:108px"></div><div class="bar-label">30–34</div><div class="bar-right" style="width:106px"></div>
-      <!-- 25-29 -->
-      <div class="bar-left" style="width:112px"></div><div class="bar-label">25–29</div><div class="bar-right" style="width:110px"></div>
-      <!-- 20-24 -->
-      <div class="bar-left" style="width:118px"></div><div class="bar-label">20–24</div><div class="bar-right" style="width:114px"></div>
-      <!-- 15-19 -->
-      <div class="bar-left" style="width:122px"></div><div class="bar-label">15–19</div><div class="bar-right" style="width:118px"></div>
-      <!-- 10-14 -->
-      <div class="bar-left" style="width:126px"></div><div class="bar-label">10–14</div><div class="bar-right" style="width:120px"></div>
-      <!-- 5-9 -->
-      <div class="bar-left" style="width:128px"></div><div class="bar-label">5–9</div><div class="bar-right" style="width:122px"></div>
-      <!-- 0-4 -->
-      <div class="bar-left" style="width:130px"></div><div class="bar-label">0–4</div><div class="bar-right" style="width:126px"></div>
+  </div>
+
+  <!-- Points system -->
+  <div class="pyramid-wrap" style="margin-bottom:24px">
+    <div class="pyramid-title" style="color:var(--c-demo)">The Points System — Economic Immigration</div>
+    <div class="info-block" style="--ca:var(--c-demo);margin-bottom:16px">
+      Applicants are scored out of <strong>100 points</strong> across 6 categories. A minimum of <strong>67 points</strong> is typically required to qualify. The system selects immigrants most likely to succeed economically in Canada.
     </div>
-    <div style="max-width:560px;margin:6px auto 0;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);">
-      <span>← MALE</span><span>% of population</span><span>FEMALE →</span>
+    <div class="table-wrap" style="margin-bottom:0">
+      <table>
+        <thead>
+          <tr>
+            <th>Factor</th>
+            <th>Max Points</th>
+            <th>Why Canada Values It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:var(--c-demo)">① Education</strong></td>
+            <td><span class="pts-max">25 pts</span></td>
+            <td>Higher education = more skills. PhD/Master's = 25 pts. Bachelor's ≈ 20 pts. More educated → more productive worker.</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--c-demo)">② Language Skills</strong></td>
+            <td><span class="pts-max">28 pts</span></td>
+            <td>English and/or French fluency. Tested via IELTS or TEF. Better language = better integration, employment, and communication.</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--c-demo)">③ Work Experience</strong></td>
+            <td><span class="pts-max">15 pts</span></td>
+            <td>Skilled work experience in the last 10 years. Proven ability to work → less risk of unemployment in Canada.</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--c-demo)">④ Age</strong></td>
+            <td><span class="pts-max">12 pts</span></td>
+            <td>Max points ages 18–35. Younger workers have more years to contribute taxes and fill labour needs before retiring.</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--c-demo)">⑤ Job Offer</strong></td>
+            <td><span class="pts-max">10 pts</span></td>
+            <td>Arranged employment with a Canadian employer. Reduces unemployment risk; fills identified labour shortages immediately.</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--c-demo)">⑥ Adaptability</strong></td>
+            <td><span class="pts-max">10 pts</span></td>
+            <td>Previous study/work in Canada, relatives in Canada, spouse's education/language. More ties = easier settlement and success.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:12px;font-family:'JetBrains Mono',monospace;">↑ Example shown: <span style="color:var(--pyramid)">Expansive</span> pyramid — wide base, young population, high birth rate</p>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: What is the difference between a push and pull factor? Give one example of each for someone coming to Canada.</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>Push factor:</strong> A negative condition that forces or motivates someone to LEAVE their home country. Example: fleeing a civil war in Syria, or leaving a country with high unemployment and no economic opportunities.<br><br><strong>Pull factor:</strong> A positive condition that ATTRACTS someone to Canada specifically. Example: Canada's reputation for safety, universal healthcare, job opportunities, or having family already living here. Both push and pull factors work together to drive someone's decision to migrate.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: What are the three main classes of immigrants Canada accepts? Which is the largest?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">The three classes are: <strong>(1) Economic Class</strong> (~58%) — the largest group, selected through the points system based on skills and ability to work. <strong>(2) Family Class</strong> (~27%) — sponsored by a Canadian citizen or permanent resident (spouses, children, parents). <strong>(3) Refugee Class</strong> (~15%) — people fleeing war, persecution, or danger. The <strong>Economic Class</strong> is by far the largest.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Why does Canada give the most points for "Language Skills" in the immigration points system?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">Language skills earn the most points (28/100) because being able to communicate in English or French is essential for <strong>getting a job, integrating into society, and being self-sufficient</strong> in Canada. Immigrants who can't speak an official language struggle to find work and may require more government support. Strong language skills also help immigrants communicate with coworkers, use services, and participate in the community — making them more likely to succeed and contribute to the economy.</div>
+  </div>
+</div>
+
+<!-- =========== WHERE PEOPLE LIVE =========== -->
+<div class="section" id="where">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:rgba(91,141,238,0.12);color:var(--c-where)">🏙️</div>
+    <div>
+      <div class="sec-title" style="color:var(--c-where)">Where People Live</div>
+      <div class="sec-sub">// population distribution · top 3 cities · rural vs urban · 4 settlement patterns</div>
+    </div>
   </div>
 
   <div class="cards-grid">
-    <div class="card pyramid-color" style="grid-column: 1 / -1;">
-      <div class="card-title">4 Types of Population Pyramids</div>
-      <div class="pyramid-types">
-        <div class="pyramid-type-card">
-          <strong>① EXPANSIVE (Wide Base)</strong>
-          <p>Wide base, narrow top. High birth rate, high death rate, low life expectancy. Young, fast-growing population. Found in: LEDCs (less economically developed countries) like Nigeria, Afghanistan.</p>
+    <div class="card" style="--ca:var(--c-where)">
+      <div class="card-title">Population Distribution in Canada</div>
+      <ul>
+        <li>Canada is the <em>2nd largest country by area</em> but has a relatively small population (~40 million)</li>
+        <li>Population is <em>very unevenly distributed</em> — most people live in a narrow strip along the US border</li>
+        <li>About <em>90% of Canadians</em> live within 200 km of the US border</li>
+        <li>Southern Ontario and Québec have the highest concentrations</li>
+        <li>Northern Canada (Nunavut, NWT, Yukon) = vast area but tiny population</li>
+        <li><em>Why?</em> Milder climate, better agricultural land, more job opportunities, historical settlement routes</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-where)">
+      <div class="card-title">Top 3 Immigrant Destination Cities</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--c-where)">
+          <strong style="color:var(--c-where);font-size:13px">① Toronto (GTA), Ontario</strong>
+          <p style="font-size:12.5px;margin-top:4px;color:var(--muted)">Canada's largest city and #1 destination — receives ~50% of Ontario's immigrants. One of the world's most multicultural cities. Major economic hub.</p>
         </div>
-        <div class="pyramid-type-card">
-          <strong>② CONSTRICTIVE (Narrow Base)</strong>
-          <p>Narrow base getting wider in middle. Low birth rate, aging population, slow or negative growth. Found in: MEDCs (more economically developed) like Germany, Japan, Canada.</p>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--c-where)">
+          <strong style="color:var(--c-where);font-size:13px">② Vancouver, British Columbia</strong>
+          <p style="font-size:12.5px;margin-top:4px;color:var(--muted)">2nd largest immigrant hub. Strong Pacific ties attract immigrants from China, Philippines, South Korea, and India. Mild climate is a pull factor.</p>
         </div>
-        <div class="pyramid-type-card">
-          <strong>③ STATIONARY (Rectangular/Column)</strong>
-          <p>Almost equal-width bars throughout. Low birth rate, low death rate, long life expectancy. Stable/replacement-level population. Found in: some Northern/Western European countries.</p>
-        </div>
-        <div class="pyramid-type-card">
-          <strong>④ BABY BOOM BULGE</strong>
-          <p>A distinct bulge in a specific age cohort (middle of pyramid). Indicates a past baby boom — unusually high births in that era. Canada's baby boom was 1946–1965. Boomers are now in their 60s–80s.</p>
+        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--c-where)">
+          <strong style="color:var(--c-where);font-size:13px">③ Montréal, Québec</strong>
+          <p style="font-size:12.5px;margin-top:4px;color:var(--muted)">Québec selects its own immigrants (must speak French). Large Francophone immigrant community from North Africa, Caribbean, and France.</p>
         </div>
       </div>
     </div>
-
-    <div class="card pyramid-color">
-      <div class="card-title">Canada's Pyramid — Key Features</div>
-      <ul>
-        <li><span class="highlight">Constrictive / aging shape</span> — narrow base, wide middle, wider top</li>
-        <li>Baby Boom bulge visible in ages 60–80 (born 1946–1965)</li>
-        <li>Low birth rate (~1.4 children per woman — below replacement of 2.1)</li>
-        <li>High life expectancy (~83 years)</li>
-        <li>Immigration is key to maintaining population growth</li>
-        <li>Dependency ratio increasing — more seniors per working-age person</li>
-      </ul>
-    </div>
-    <div class="card pyramid-color">
-      <div class="card-title">What You Can Read from a Pyramid</div>
-      <ul>
-        <li><span class="highlight">Birth rate:</span> width of the base (0–4 age group)</li>
-        <li><span class="highlight">Death rate / life expectancy:</span> how quickly bars narrow toward top</li>
-        <li><span class="highlight">Gender imbalance:</span> unequal left/right bars (e.g. war affects males)</li>
-        <li><span class="highlight">Baby boom:</span> a wider cohort in middle generations</li>
-        <li><span class="highlight">Immigration:</span> sudden bulge in young working-age groups (20–40)</li>
-        <li><span class="highlight">Future growth:</span> wide base = growing; narrow base = declining</li>
-      </ul>
-    </div>
   </div>
 
-  <div class="quiz-box">
-    <div class="quiz-q">Q: A population pyramid shows a very wide base (0–14) and a very narrow top (65+). What does this tell you about that country?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">This is an <strong>expansive pyramid</strong>. The wide base shows a <strong>high birth rate</strong>. The narrow top shows a <strong>high death rate</strong> and <strong>low life expectancy</strong> — few people are surviving to old age. The population is young and growing rapidly. This is typical of a Less Economically Developed Country (LEDC) with limited access to healthcare and high fertility rates.</div>
-  </div>
-</div>
-
-<!-- ============ DEFINITIONS ============ -->
-<div class="section" id="defs">
-  <div class="sec-head">
-    <div class="sec-icon" style="background: rgba(149,224,108,0.12); color: var(--defs);">📖</div>
-    <div>
-      <div class="sec-title" style="color: var(--defs)">Key Definitions</div>
-      <div class="sec-sub">// population terms · migration · demographic concepts</div>
-    </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card defs-color">
-      <div class="card-title">Core Population Terms</div>
-      <ul>
-        <li><span class="highlight">Birth Rate (CBR):</span> number of live births per 1,000 people per year</li>
-        <li><span class="highlight">Death Rate (CDR):</span> number of deaths per 1,000 people per year</li>
-        <li><span class="highlight">Natural Increase Rate (NIR):</span> Birth Rate − Death Rate (expressed per 1,000 or as %)</li>
-        <li><span class="highlight">Fertility Rate (TFR):</span> average number of children a woman will have in her lifetime</li>
-        <li><span class="highlight">Replacement Rate:</span> TFR of ~2.1 children per woman needed to maintain population size</li>
-        <li><span class="highlight">Life Expectancy:</span> average number of years a person in a population is expected to live</li>
-        <li><span class="highlight">Infant Mortality Rate:</span> deaths of children under 1 year old per 1,000 live births</li>
-      </ul>
-    </div>
-
-    <div class="card defs-color">
-      <div class="card-title">Migration Terms</div>
-      <ul>
-        <li><span class="highlight">Immigrant:</span> a person who permanently moves to a new country (Canada = destination)</li>
-        <li><span class="highlight">Emigrant:</span> a person who permanently leaves their home country</li>
-        <li><span class="highlight">Refugee:</span> a person forced to flee their country due to war, persecution, or disaster</li>
-        <li><span class="highlight">Push Factor:</span> a negative condition driving someone to leave their home country (war, poverty, famine)</li>
-        <li><span class="highlight">Pull Factor:</span> a positive condition attracting someone to a destination country (jobs, safety, family)</li>
-        <li><span class="highlight">Net Migration:</span> immigration − emigration for a country in a given period</li>
-        <li><span class="highlight">Brain Drain:</span> emigration of skilled/educated people from a country</li>
-      </ul>
-    </div>
-
-    <div class="card defs-color">
-      <div class="card-title">Population Distribution Terms</div>
-      <ul>
-        <li><span class="highlight">Population Density:</span> number of people per km² in an area</li>
-        <li><span class="highlight">Ecumene:</span> the permanently inhabited portion of Earth's surface</li>
-        <li><span class="highlight">Urban:</span> a densely populated area (city or town)</li>
-        <li><span class="highlight">Rural:</span> low-density area outside cities; often agricultural</li>
-        <li><span class="highlight">Urbanization:</span> the process of populations moving from rural to urban areas</li>
-        <li><span class="highlight">Census Metropolitan Area (CMA):</span> urban core of 100,000+ people plus surrounding communities</li>
-        <li><span class="highlight">Golden Horseshoe:</span> densely populated region around Lake Ontario — Canada's largest urban cluster</li>
-      </ul>
-    </div>
-
-    <div class="card defs-color">
-      <div class="card-title">Demographic Transition + Aging</div>
-      <ul>
-        <li><span class="highlight">Demographic Transition Model (DTM):</span> model showing how birth/death rates change as a country develops (4 stages)</li>
-        <li><span class="highlight">Dependency Ratio:</span> ratio of non-working (young + elderly) to working-age (15–64) population</li>
-        <li><span class="highlight">Baby Boom:</span> significant increase in birth rates (Canada: 1946–1965 post-WWII)</li>
-        <li><span class="highlight">Baby Bust:</span> period following a boom when birth rates drop sharply</li>
-        <li><span class="highlight">Aging Population:</span> population with increasing proportion of elderly people (65+)</li>
-        <li><span class="highlight">Population Pyramid:</span> bar graph showing age and gender distribution of a population</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: What is the difference between a "push factor" and a "pull factor"? Give an example of each for someone immigrating to Canada.</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans"><strong>Push factor:</strong> a reason to LEAVE home country — e.g., fleeing a civil war in Syria, extreme poverty in Haiti, political persecution, or lack of employment. <br><br><strong>Pull factor:</strong> a reason to CHOOSE Canada specifically — e.g., job opportunities, high standard of living, free healthcare, political stability, family already in Canada, or high quality of education. Both forces work together to drive migration decisions.</div>
-  </div>
-</div>
-
-<!-- ============ IMMIGRANT TYPES ============ -->
-<div class="section" id="types">
-  <div class="sec-head">
-    <div class="sec-icon" style="background: rgba(179,136,255,0.12); color: var(--types);">✈️</div>
-    <div>
-      <div class="sec-title" style="color: var(--types)">Immigrant Types</div>
-      <div class="sec-sub">// economic · family · refugee · other classes</div>
-    </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card types-color" style="grid-column: 1 / -1;">
-      <div class="card-title">Canada's Immigration Classes — Overview</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:8px">
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;border-left:3px solid var(--types)">
-          <strong style="color:var(--types);font-size:12px;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:6px">① ECONOMIC CLASS (~58%)</strong>
-          <p style="font-size:12.5px;line-height:1.5">Selected using the points system. Includes Skilled Workers, Canadian Experience Class, and Business Immigrants. Largest category. Must demonstrate ability to work and contribute economically.</p>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;border-left:3px solid var(--types)">
-          <strong style="color:var(--types);font-size:12px;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:6px">② FAMILY CLASS (~27%)</strong>
-          <p style="font-size:12.5px;line-height:1.5">Sponsored by a Canadian citizen or permanent resident. Includes spouses, common-law partners, dependent children, parents, and grandparents. Sponsor must financially support the newcomer.</p>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;border-left:3px solid var(--types)">
-          <strong style="color:var(--types);font-size:12px;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:6px">③ REFUGEE CLASS (~15%)</strong>
-          <p style="font-size:12.5px;line-height:1.5">Protected persons fleeing persecution, war, or danger. Includes Government-Assisted Refugees (GARs) and Privately Sponsored Refugees. Canada-Born: claim status after arriving; Convention Refugees: recognized abroad first.</p>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;border-left:3px solid var(--types)">
-          <strong style="color:var(--types);font-size:12px;font-family:'JetBrains Mono',monospace;display:block;margin-bottom:6px">④ OTHER / HUMANITARIAN</strong>
-          <p style="font-size:12.5px;line-height:1.5">Includes those admitted on humanitarian and compassionate grounds (H&C), or for other special circumstances. Also includes provincial nominees under Provincial Nominee Programs (PNPs).</p>
-        </div>
+  <!-- Rural vs Urban -->
+  <div class="pyramid-wrap" style="margin-bottom:24px">
+    <div class="pyramid-title" style="color:var(--c-where);margin-bottom:16px">Rural vs. Urban Living</div>
+    <div class="compare-grid" style="margin-bottom:0">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-natural);margin-bottom:12px">URBAN — Advantages</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> More job opportunities across many industries</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Better access to hospitals, specialists, services</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> More schools, universities, cultural events</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Public transit — less reliance on a car</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Diverse communities, restaurants, entertainment</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Immigrant services (ESL, settlement agencies)</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-pyramid);margin-bottom:12px">URBAN — Disadvantages</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Very high housing costs (Toronto, Vancouver)</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Traffic congestion and long commutes</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Higher cost of living overall</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Pollution, noise, overcrowding</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Less green space and nature access</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-natural);margin-bottom:12px">RURAL — Advantages</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Lower housing and land costs</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> More space, access to nature</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Quieter, slower pace of life</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Stronger sense of community</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Less pollution and traffic</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-pyramid);margin-bottom:12px">RURAL — Disadvantages</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Fewer job opportunities</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Less access to hospitals and specialists</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Fewer schools, colleges, entertainment</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Need a car — no public transit</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Less diversity and fewer services for newcomers</li>
+        </ul>
       </div>
     </div>
-
-    <div class="card types-color">
-      <div class="card-title">Economic Sub-Categories</div>
-      <ul>
-        <li><span class="highlight">Federal Skilled Worker:</span> uses the 6-factor points system; requires 67+ pts</li>
-        <li><span class="highlight">Federal Skilled Trades:</span> for carpenters, electricians, plumbers, etc.</li>
-        <li><span class="highlight">Canadian Experience Class (CEC):</span> for those who already have temporary work/study experience in Canada</li>
-        <li><span class="highlight">Business Immigrants:</span> investors, entrepreneurs, and self-employed persons who will create jobs or invest</li>
-        <li><span class="highlight">Provincial Nominee Program (PNP):</span> provinces nominate workers based on local labour needs</li>
-      </ul>
-    </div>
-    <div class="card types-color">
-      <div class="card-title">Refugee Sub-Categories</div>
-      <ul>
-        <li><span class="highlight">Convention Refugee:</span> recognized by UNHCR outside Canada; meets 1951 UN Refugee Convention criteria (persecution based on race, religion, nationality, political opinion, social group)</li>
-        <li><span class="highlight">Government-Assisted Refugee (GAR):</span> selected abroad, fully supported by federal government for first year</li>
-        <li><span class="highlight">Privately Sponsored Refugee:</span> supported by a Canadian group/organization for first year</li>
-        <li><span class="highlight">Asylum Seeker:</span> claims refugee status after arriving in Canada; must be approved by Immigration and Refugee Board</li>
-      </ul>
-    </div>
   </div>
 
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Class</th>
-          <th>How Selected</th>
-          <th>Key Requirement</th>
-          <th>% of Annual Immigrants (approx.)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong style="color:var(--types)">Economic</strong></td>
-          <td>Points system / Express Entry</td>
-          <td>67+ points; skilled work experience</td>
-          <td>~58%</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--types)">Family</strong></td>
-          <td>Sponsorship by citizen/PR</td>
-          <td>Sponsor must financially support newcomer</td>
-          <td>~27%</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--types)">Refugee</strong></td>
-          <td>UNHCR / asylum claim / sponsorship</td>
-          <td>Proven risk of persecution or danger</td>
-          <td>~15%</td>
-        </tr>
-        <tr>
-          <td><strong style="color:var(--types)">Other (H&C, PNP)</strong></td>
-          <td>Humanitarian grounds / provincial</td>
-          <td>Special circumstances; provincial needs</td>
-          <td>Varies</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: What is the difference between a "refugee" and an "economic immigrant"? Can a refugee ever use the points system?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">An <strong>economic immigrant</strong> chooses to move to Canada voluntarily in search of better economic opportunities — they apply through the points system and are selected based on skills and contributions they'll make. A <strong>refugee</strong> is forced to flee their home country due to war, persecution, or danger — they are not selected through a points system; instead they are recognized based on a genuine need for protection. Refugees generally cannot use the points system — they access a separate humanitarian intake process.</div>
-  </div>
-</div>
-
-<!-- ============ POPULATION CALCULATIONS ============ -->
-<div class="section" id="calc">
-  <div class="sec-head">
-    <div class="sec-icon" style="background: rgba(91,141,238,0.12); color: var(--calc);">🔢</div>
-    <div>
-      <div class="sec-title" style="color: var(--calc)">Population Calculations</div>
-      <div class="sec-sub">// formulas · worked examples · practice questions</div>
-    </div>
-  </div>
-
-  <div class="formula-card calc-color">
-    <div class="formula-name">① Natural Increase Rate (NIR)</div>
-    <div class="formula-box">NIR = Birth Rate − Death Rate</div>
-    <div class="formula-note">Result is per 1,000 people/year. To express as a % → divide by 10.<br>
-    <strong>Example:</strong> Birth Rate = 18, Death Rate = 7 → NIR = 18 − 7 = <strong>11 per 1,000</strong> = <strong>1.1%</strong></div>
-  </div>
-
-  <div class="formula-card calc-color">
-    <div class="formula-name">② Population Growth Rate (includes migration)</div>
-    <div class="formula-box">Growth Rate = NIR + Net Migration Rate</div>
-    <div class="formula-note">Net Migration = Immigration rate − Emigration rate (per 1,000)<br>
-    <strong>Example:</strong> NIR = 5, Net Migration = 8 → Growth Rate = <strong>13 per 1,000</strong> = <strong>1.3%</strong></div>
-  </div>
-
-  <div class="formula-card calc-color">
-    <div class="formula-name">③ Population Density</div>
-    <div class="formula-box">Population Density = Total Population ÷ Area (km²)</div>
-    <div class="formula-note"><strong>Example:</strong> Ontario population = 14,000,000 / Area = 1,076,395 km² → Density ≈ <strong>13 people/km²</strong><br>
-    Note: Ontario's density is uneven — most people are in the southern Golden Horseshoe.</div>
-  </div>
-
-  <div class="formula-card calc-color">
-    <div class="formula-name">④ Doubling Time (Rule of 70)</div>
-    <div class="formula-box">Doubling Time = 70 ÷ Growth Rate (%)</div>
-    <div class="formula-note"><strong>Example:</strong> A country with 2% growth rate → 70 ÷ 2 = <strong>35 years</strong> to double its population.<br>
-    Canada's growth rate (~1%) → doubles in ~70 years.</div>
-  </div>
-
-  <div class="formula-card calc-color">
-    <div class="formula-name">⑤ Dependency Ratio</div>
-    <div class="formula-box">Dependency Ratio = (Population 0–14 + Population 65+) ÷ Population 15–64 × 100</div>
-    <div class="formula-note">Shows how many dependents (children + seniors) exist per 100 working-age people.<br>
-    <strong>Example:</strong> 25 youth + 20 seniors per 55 working adults → (45 ÷ 55) × 100 = <strong>82 dependents per 100 workers</strong>.<br>
-    Higher = more strain on working-age population (taxes, social services).</div>
-  </div>
-
-  <div class="formula-card calc-color">
-    <div class="formula-name">⑥ Future Population (simple growth)</div>
-    <div class="formula-box">Future Pop = Current Pop × (1 + Growth Rate)^Years</div>
-    <div class="formula-note"><strong>Example:</strong> Current pop = 40 million, Growth = 1% → After 10 years: 40,000,000 × (1.01)^10 ≈ <strong>44.2 million</strong></div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: A country has a birth rate of 22/1,000 and death rate of 6/1,000. Its immigration rate is 5/1,000 and emigration rate is 2/1,000. What is: (a) the NIR, (b) the Net Migration, and (c) the total growth rate?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">
-      <strong>(a) NIR</strong> = Birth Rate − Death Rate = 22 − 6 = <strong>16 per 1,000 (1.6%)</strong><br><br>
-      <strong>(b) Net Migration</strong> = Immigration − Emigration = 5 − 2 = <strong>3 per 1,000</strong><br><br>
-      <strong>(c) Total Growth Rate</strong> = NIR + Net Migration = 16 + 3 = <strong>19 per 1,000 (1.9%)</strong>
-    </div>
-  </div>
-  <div class="quiz-box">
-    <div class="quiz-q">Q: A country has a growth rate of 3.5%. Use the Rule of 70 to find its doubling time. Is this fast or slow?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Doubling Time = 70 ÷ 3.5 = <strong>20 years</strong>. This is <strong>very fast</strong> — the population would double in just two decades. This is typical of high-growth developing countries and creates challenges for food, housing, jobs, schools, and healthcare infrastructure.</div>
-  </div>
-</div>
-
-<!-- ============ SETTLEMENT TRENDS ============ -->
-<div class="section" id="settle">
-  <div class="sec-head">
-    <div class="sec-icon" style="background: rgba(247,163,92,0.12); color: var(--settle);">🏙</div>
-    <div>
-      <div class="sec-title" style="color: var(--settle)">Settlement Trends</div>
-      <div class="sec-sub">// where immigrants settle · urbanization · golden horseshoe · barriers</div>
-    </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card settle-color" style="grid-column: 1 / -1;">
-      <div class="card-title">Where Do Immigrants Settle in Canada?</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:8px">
-        <div style="background:var(--surface2);padding:14px;border-radius:8px">
-          <strong style="color:var(--settle);font-size:12px;font-family:'JetBrains Mono',monospace">ONTARIO (~50%)</strong>
-          <p style="font-size:12.5px;margin-top:6px;line-height:1.5">Receives the most immigrants. GTA (Greater Toronto Area) is the #1 destination. Toronto is one of the most diverse cities in the world.</p>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px">
-          <strong style="color:var(--settle);font-size:12px;font-family:'JetBrains Mono',monospace">BC (~17%)</strong>
-          <p style="font-size:12.5px;margin-top:6px;line-height:1.5">Vancouver is the 2nd largest immigrant destination. Strong ties to Asia-Pacific. Warm climate and Pacific location are pull factors.</p>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px">
-          <strong style="color:var(--settle);font-size:12px;font-family:'JetBrains Mono',monospace">QUÉBEC (~17%)</strong>
-          <p style="font-size:12.5px;margin-top:6px;line-height:1.5">Montréal is a major destination. Québec selects its own economic immigrants (must be French-speaking). Large Francophone immigrant community.</p>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px">
-          <strong style="color:var(--settle);font-size:12px;font-family:'JetBrains Mono',monospace">PRAIRIES (~12%)</strong>
-          <p style="font-size:12.5px;margin-top:6px;line-height:1.5">Calgary and Edmonton growing fast. PNP programs attract skilled workers needed for oil & gas, agriculture. More affordable than TO/Vancouver.</p>
-        </div>
+  <!-- 4 Settlement Patterns -->
+  <div class="pyramid-wrap" style="margin-bottom:24px">
+    <div class="pyramid-title" style="color:var(--c-where);margin-bottom:16px">4 Settlement Patterns</div>
+    <div class="settle-patterns">
+      <div class="sp-card">
+        <div class="sp-icon">🌊</div>
+        <div class="sp-name">Linear / Along Water</div>
+        <div class="sp-desc">Settlements along rivers, lakes, or coastlines. Early Canadian settlements followed waterways (St. Lawrence, Great Lakes). Water = transportation route + fresh water + fish.</div>
       </div>
-    </div>
-
-    <div class="card settle-color">
-      <div class="card-title">Why Immigrants Choose Major Cities</div>
-      <ul>
-        <li><span class="highlight">Employment:</span> more job opportunities in diverse urban economies</li>
-        <li><span class="highlight">Ethnic communities:</span> existing communities provide social support, language, cultural services</li>
-        <li><span class="highlight">Services:</span> better access to settlement agencies, ESL programs, healthcare, schools</li>
-        <li><span class="highlight">Transportation:</span> urban transit; less need for a car</li>
-        <li><span class="highlight">Family reunification:</span> sponsors often already living in cities</li>
-        <li><span class="highlight">Education:</span> universities, colleges, and schools concentrated in cities</li>
-      </ul>
-    </div>
-    <div class="card settle-color">
-      <div class="card-title">The Golden Horseshoe</div>
-      <ul>
-        <li>Densely populated urban region wrapping around the western end of Lake Ontario</li>
-        <li>Includes: Toronto, Mississauga, Brampton, Hamilton, Oshawa, Burlington, Niagara Falls</li>
-        <li>Home to over <span class="highlight">9+ million people</span> — Canada's most densely populated region</li>
-        <li>Receives the <span class="highlight">majority of Ontario's immigrants</span></li>
-        <li>Major economic hub: finance, manufacturing, tech, film, trade through Port of Hamilton</li>
-        <li>Urban sprawl = loss of agricultural land (Greenbelt meant to protect farmland)</li>
-      </ul>
-    </div>
-    <div class="card settle-color">
-      <div class="card-title">Challenges Immigrants Face</div>
-      <ul>
-        <li><span class="highlight">Foreign credential recognition:</span> degrees and professional qualifications not always accepted</li>
-        <li><span class="highlight">Language barriers:</span> English/French proficiency takes time; limits employment access</li>
-        <li><span class="highlight">Housing costs:</span> Toronto and Vancouver have extremely high real estate prices</li>
-        <li><span class="highlight">Discrimination:</span> visible minorities may face systemic barriers in hiring</li>
-        <li><span class="highlight">Social isolation:</span> leaving family/community behind; cultural adjustment</li>
-        <li><span class="highlight">"Canadian experience" catch-22:</span> employers want experience, but immigrants can't get experience without a job</li>
-      </ul>
-    </div>
-    <div class="card settle-color">
-      <div class="card-title">Rural Settlement Initiatives</div>
-      <ul>
-        <li>Government trying to direct more immigrants to <span class="highlight">rural and smaller communities</span> to fill labour shortages</li>
-        <li><span class="highlight">Provincial Nominee Programs (PNPs)</span> allow provinces to target specific skills needed locally (e.g. healthcare in rural ON)</li>
-        <li><span class="highlight">Rural and Northern Immigration Pilot:</span> federal program offering PR to those who settle in participating smaller communities</li>
-        <li>Challenge: smaller communities have fewer services, ethnic communities, and employment opportunities</li>
-        <li>Many immigrants initially settle rurally but <span class="highlight">migrate to cities within 5 years</span></li>
-      </ul>
-    </div>
-    <div class="card settle-color">
-      <div class="card-title">Historical Change in Source Countries</div>
-      <div class="timeline" style="--card-accent: var(--settle)">
-        <div class="tl-item"><strong>Before 1960s — European Dominated</strong><p>Majority from UK, Italy, Germany, Ukraine, Poland. Largely white, Christian. Immigration driven by post-WWII labour demand.</p></div>
-        <div class="tl-item"><strong>1967 — Points System Introduced</strong><p>Removed racial discrimination from selection. Opened immigration to all countries equally. Shift toward merit-based system.</p></div>
-        <div class="tl-item"><strong>1970s–1990s — Asia/Caribbean Surge</strong><p>Hong Kong Chinese (pre-1997 handover), South Asian, Caribbean, Filipino immigrants grew rapidly.</p></div>
-        <div class="tl-item"><strong>2000s–Present — Highly Diverse</strong><p>Top source countries now: India, China, Philippines, Nigeria, Pakistan, Syria. Asia source of most economic immigrants. Greater visible minority representation.</p></div>
+      <div class="sp-card">
+        <div class="sp-icon">🛣️</div>
+        <div class="sp-name">Linear / Along Roads</div>
+        <div class="sp-desc">Settlements that develop along roads or railways. Homes/businesses line the main road. Common in Quebec's seigneurial system (long, narrow lots along roads).</div>
+      </div>
+      <div class="sp-card">
+        <div class="sp-icon">🔵</div>
+        <div class="sp-name">Clustered / Nucleated</div>
+        <div class="sp-desc">Homes and buildings grouped closely together around a central point (church, market square). Common in Quebec villages, European-style towns. Easier to share services and defense.</div>
+      </div>
+      <div class="sp-card">
+        <div class="sp-icon">🌾</div>
+        <div class="sp-name">Dispersed / Scattered</div>
+        <div class="sp-desc">Buildings spread widely across the landscape with no clear centre. Common in farming areas (Prairies) where large land grants spread farms far apart. Each farm is self-sufficient.</div>
       </div>
     </div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: Why do most immigrants to Canada settle in Toronto, Vancouver, and Montréal rather than in rural areas?</div>
+    <div class="quiz-q">Q: Why do most immigrants to Canada settle in Toronto, Vancouver, or Montréal rather than rural areas?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Several pull factors draw immigrants to major cities: (1) <strong>Employment</strong> — diverse urban economies offer more job opportunities across many sectors. (2) <strong>Established ethnic communities</strong> — existing diaspora communities provide language support, cultural familiarity, and social networks. (3) <strong>Settlement services</strong> — ESL programs, immigrant support agencies, and social services are concentrated in cities. (4) <strong>Family connections</strong> — family class immigrants follow sponsors who already live in cities. (5) <strong>Transit and infrastructure</strong> — urban public transit reduces need to own a car. Rural areas lack many of these supports.</div>
+    <div class="quiz-ans">Several pull factors draw immigrants to these cities: <strong>(1) Employment</strong> — large urban economies offer more jobs across many sectors. <strong>(2) Established ethnic communities</strong> — existing diaspora communities provide language support, cultural familiarity, and social networks. <strong>(3) Settlement services</strong> — ESL programs, immigrant support agencies, and social services are concentrated in cities. <strong>(4) Family connections</strong> — family-class immigrants follow sponsors who already live in cities. <strong>(5) Public transit</strong> — immigrants can get around without owning a car. Rural areas lack most of these supports.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Describe one of the 4 settlement patterns and explain why people would have settled that way historically.</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">Example answer: <strong>Linear pattern along waterways</strong> — Early settlers in Canada built their communities along rivers and lakeshores because water was the most important resource. It provided fresh drinking water, a source of food (fish), and most importantly, a transportation route. Before roads and railways, rivers like the St. Lawrence were the highways of Canada — settlers needed to be close to them to trade goods, travel, and receive supplies.</div>
   </div>
 </div>
+
+<!-- =========== POPULATION DENSITY =========== -->
+<div class="section" id="density">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:rgba(232,197,71,0.12);color:var(--c-density)">📍</div>
+    <div>
+      <div class="sec-title" style="color:var(--c-density)">Population Density</div>
+      <div class="sec-sub">// definition · examples · Canada's density</div>
+    </div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="card" style="--ca:var(--c-density)">
+      <div class="card-title">What Is Population Density?</div>
+      <p><em>Population density</em> is the number of people living in a given area, expressed as <em>people per km²</em>.</p>
+      <br>
+      <div style="background:var(--surface2);border-radius:6px;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--c-density);margin:10px 0">
+        Population Density = Total Population ÷ Area (km²)
+      </div>
+      <p>It tells you how <em>crowded or spread out</em> a population is across the land.</p>
+      <br>
+      <ul>
+        <li><em>High density:</em> many people in a small area (cities)</li>
+        <li><em>Low density:</em> few people spread across a large area (rural, northern Canada)</li>
+        <li>Canada's <em>overall density ≈ 4 people/km²</em> — one of the lowest in the world</li>
+        <li>But Canada's population is <em>extremely uneven</em> — most people are concentrated in the south</li>
+        <li>Toronto's density: ~4,400 people/km² vs. Nunavut: &lt;0.1 people/km²</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-density)">
+      <div class="card-title">Why Population Density Varies in Canada</div>
+      <ul>
+        <li><em>Climate:</em> harsh winters in the North make settlement difficult; milder south is more habitable</li>
+        <li><em>Agricultural land:</em> fertile farmland in southern Ontario and Prairies supports large populations</li>
+        <li><em>Resources:</em> mines, oil sands, and forests attract workers to specific regions</li>
+        <li><em>Transportation:</em> railways and highways developed in southern Canada; easier access = more settlement</li>
+        <li><em>History:</em> original European settlements were in the south along waterways (St. Lawrence, Great Lakes)</li>
+        <li><em>Jobs:</em> manufacturing, finance, and tech concentrated in cities → people follow jobs</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-density); grid-column: 1 / -1;">
+      <div class="card-title">Density Across Canada — Key Examples</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:4px">
+        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
+          <div style="font-size:22px;margin-bottom:6px">🏙️</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">TORONTO</div>
+          <div style="font-size:13px;color:var(--text)">~4,400 people/km²</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Extremely high — dense urban core</div>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
+          <div style="font-size:22px;margin-bottom:6px">🌽</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">PRAIRIES</div>
+          <div style="font-size:13px;color:var(--text)">~2–3 people/km²</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Vast farmland, few cities</div>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
+          <div style="font-size:22px;margin-bottom:6px">🍂</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">ONTARIO (overall)</div>
+          <div style="font-size:13px;color:var(--text)">~13 people/km²</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Uneven — south dense, north sparse</div>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
+          <div style="font-size:22px;margin-bottom:6px">🧊</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">NUNAVUT</div>
+          <div style="font-size:13px;color:var(--text)">&lt;0.1 people/km²</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Largest territory, smallest population</div>
+        </div>
+        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
+          <div style="font-size:22px;margin-bottom:6px">🍁</div>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">CANADA (overall)</div>
+          <div style="font-size:13px;color:var(--text)">~4 people/km²</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">One of world's lowest national densities</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: What is population density? Why is Canada's overall density low, even though cities like Toronto are very crowded?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>Population density</strong> is the number of people per km² in an area. Canada's overall density is very low (~4 people/km²) because Canada is an enormous country (the 2nd largest in the world by area) with a relatively small population of ~40 million. However, most of those people are packed into a narrow strip along the US border in the south. Regions like Nunavut and the Northwest Territories cover millions of km² but have only a few thousand residents, which brings the national average way down. Toronto and Vancouver, by contrast, have very high local density because millions of people are living and working in a small urban area.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Give two reasons why northern Canada has a very low population density.</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>(1) Harsh climate:</strong> The Arctic and subarctic North has extremely cold winters, permafrost, and short growing seasons, making it difficult to farm, build infrastructure, or live comfortably year-round. <strong>(2) Lack of economic opportunity:</strong> There are fewer industries, jobs, and services in northern communities. The remoteness makes it expensive to live there, and transportation is limited. Most Canadians stay in the south where jobs, healthcare, schools, and services are accessible.</div>
+  </div>
+</div>
+
 </main>
 </div>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggle(btn) {
+    const ans = btn.nextElementSibling;
+    if (ans.classList.contains('show')) {
+      ans.classList.remove('show');
+      btn.textContent = 'Reveal Answer';
+    } else {
+      ans.classList.add('show');
+      btn.textContent = 'Hide Answer';
+    }
+  }
 </script>
 </body>
 </html>
