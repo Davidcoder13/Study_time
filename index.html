@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Changing Populations — Unit Test Review</title>
+<title>Managing Resources — Unit Test Review</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -17,13 +17,10 @@
     --text: #e8eaf2;
     --muted: #8892aa;
 
-    --c-demo:    #4ecdc4;
-    --c-pyramid: #e85d75;
-    --c-natural: #95e06c;
-    --c-indigenous: #f7a35c;
-    --c-migration: #b388ff;
-    --c-where:   #5b8dee;
-    --c-density: #e8c547;
+    --c-industries:  #4ecdc4;
+    --c-oilsands:    #f7a35c;
+    --c-indigenous:  #b388ff;
+    --c-footprint:   #95e06c;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -92,7 +89,7 @@
   }
 
   .unit-chip {
-    background: linear-gradient(135deg, var(--accent2), #8b5cf6);
+    background: linear-gradient(135deg, #f7a35c, #e85d75);
     color: white;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
@@ -132,13 +129,10 @@
   .nav-btn:hover { background: var(--surface2); color: var(--text); border-color: var(--hov, var(--accent)); }
   .nav-btn.active { background: var(--surface2); border-color: var(--hov, var(--accent)); color: var(--hov, var(--accent)); }
 
-  .nav-btn[data-c="demo"]      { --hov: var(--c-demo); }
-  .nav-btn[data-c="pyramid"]   { --hov: var(--c-pyramid); }
-  .nav-btn[data-c="natural"]   { --hov: var(--c-natural); }
-  .nav-btn[data-c="indigenous"]{ --hov: var(--c-indigenous); }
-  .nav-btn[data-c="migration"] { --hov: var(--c-migration); }
-  .nav-btn[data-c="where"]     { --hov: var(--c-where); }
-  .nav-btn[data-c="density"]   { --hov: var(--c-density); }
+  .nav-btn[data-c="industries"] { --hov: var(--c-industries); }
+  .nav-btn[data-c="oilsands"]   { --hov: var(--c-oilsands); }
+  .nav-btn[data-c="indigenous"] { --hov: var(--c-indigenous); }
+  .nav-btn[data-c="footprint"]  { --hov: var(--c-footprint); }
 
   main { padding: 40px; max-width: 1100px; margin: 0 auto; }
 
@@ -285,7 +279,6 @@
 
   .quiz-ans.show { display: block; animation: fadeUp 0.2s ease; }
 
-  /* ---- info block ---- */
   .info-block {
     background: var(--surface2);
     border-radius: 8px;
@@ -298,8 +291,7 @@
 
   .info-block strong { color: var(--ca, var(--accent)); }
 
-  /* ---- pyramid diagram ---- */
-  .pyramid-wrap {
+  .wrap-box {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -307,120 +299,172 @@
     margin-bottom: 24px;
   }
 
-  .pyramid-title {
+  .wrap-title {
     font-family: 'Playfair Display', serif;
     font-size: 1.05rem;
     font-weight: 700;
-    color: var(--c-pyramid);
     margin-bottom: 16px;
     text-align: center;
   }
 
-  .pyr-grid {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 3px 0;
-    align-items: center;
-    max-width: 520px;
-    margin: 0 auto 12px;
-  }
+  /* Industry sector cards */
+  .sector-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
 
-  .bl { height: 20px; background: linear-gradient(to left, var(--c-pyramid), rgba(232,93,117,0.35)); border-radius: 3px 0 0 3px; justify-self: end; }
-  .br { height: 20px; background: linear-gradient(to right, var(--accent2), rgba(91,141,238,0.35)); border-radius: 0 3px 3px 0; justify-self: start; }
-  .bl2 { height: 20px; background: linear-gradient(to left, var(--c-natural), rgba(149,224,108,0.35)); border-radius: 3px 0 0 3px; justify-self: end; }
-  .br2 { height: 20px; background: linear-gradient(to right, var(--c-natural), rgba(149,224,108,0.35)); border-radius: 0 3px 3px 0; justify-self: start; }
-
-  .bl-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); text-align: center; padding: 0 6px; white-space: nowrap; }
-
-  .pyr-legend { display: flex; justify-content: center; gap: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 16px; }
-  .ldot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
-
-  .pyr-types-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin-top: 16px; }
-
-  .ptype-card {
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 14px;
-    border: 1px solid var(--border);
-  }
-
-  .ptype-card strong { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--c-pyramid); display: block; margin-bottom: 6px; letter-spacing: 0.05em; }
-  .ptype-card p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
-
-  /* timeline */
-  .timeline { position: relative; padding-left: 28px; }
-  .timeline::before { content:''; position:absolute; left:6px; top:0; bottom:0; width:2px; background: var(--border); border-radius:2px; }
-  .tl-item { position:relative; margin-bottom:18px; }
-  .tl-item::before { content:''; position:absolute; left:-24px; top:6px; width:10px; height:10px; border-radius:50%; background: var(--ca, var(--accent)); border: 2px solid var(--bg); }
-  .tl-item strong { font-size:13px; color: var(--ca, var(--text)); display:block; margin-bottom:3px; }
-  .tl-item p { font-size:12.5px; color: var(--muted); line-height:1.5; }
-
-  /* adv/dis table */
-  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
-
-  .compare-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-
-  .compare-box .compare-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .compare-box ul { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-  .compare-box li { font-size: 13px; color: var(--text); padding-left: 14px; position: relative; line-height: 1.4; }
-  .compare-box li::before { content: '✓'; position:absolute; left:0; font-size:10px; top:2px; }
-
-  .col-green .compare-title { color: var(--c-natural); }
-  .col-green li::before { color: var(--c-natural); }
-  .col-red .compare-title { color: var(--c-pyramid); }
-  .col-red li::before { content: '✗'; color: var(--c-pyramid); }
-
-  /* settlement patterns visual */
-  .settle-patterns { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px; }
-  .sp-card {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-  }
-  .sp-icon { font-size: 28px; margin-bottom: 8px; }
-  .sp-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--c-where); margin-bottom: 6px; }
-  .sp-desc { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
-
-  /* points table */
-  .pts-max { display: inline-block; background: var(--accent); color: var(--bg); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 3px; }
-
-  /* indigenous bands */
-  .indig-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
-  .indig-card {
+  .sector-card {
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 18px;
-    border-top: 3px solid var(--c-indigenous);
   }
-  .indig-card .indig-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--c-indigenous); font-weight: 700; margin-bottom: 10px; }
-  .indig-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-  .indig-card li { font-size: 12.5px; color: var(--muted); padding-left: 12px; position: relative; line-height: 1.4; }
-  .indig-card li::before { content: '·'; position:absolute; left:0; color: var(--c-indigenous); font-size: 14px; line-height: 1.2; }
+
+  .sector-card .sector-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .sector-card .sector-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .sector-card ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .sector-card li { font-size: 12.5px; color: var(--muted); padding-left: 12px; position: relative; line-height: 1.4; }
+  .sector-card li::before { content: '·'; position: absolute; left: 0; font-size: 14px; line-height: 1.2; }
+
+  /* P3 grid */
+  .p3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 24px; }
+  .p3-card {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 18px;
+    border-top: 3px solid var(--ca, var(--accent));
+  }
+  .p3-card .p3-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ca, var(--accent));
+    margin-bottom: 10px;
+    display: block;
+  }
+  .p3-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .p3-card li { font-size: 12.5px; color: var(--muted); padding-left: 12px; position: relative; line-height: 1.4; }
+  .p3-card li::before { content: '·'; position: absolute; left: 0; color: var(--ca, var(--accent)); font-size: 14px; line-height: 1.2; }
+
+  /* Footprint land types */
+  .land-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .land-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+  }
+  .land-icon { font-size: 26px; margin-bottom: 6px; }
+  .land-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--c-footprint); margin-bottom: 5px; }
+  .land-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* Sustainability terms */
+  .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .term-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--c-footprint);
+  }
+  .term-card strong { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--c-footprint); display: block; margin-bottom: 5px; letter-spacing: 0.04em; }
+  .term-card p { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+
+  /* Sustainability graph visual */
+  .sustain-graph {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .graph-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--c-footprint); margin-bottom: 12px; }
+
+  .graph-area {
+    position: relative;
+    height: 120px;
+    border-left: 2px solid var(--border);
+    border-bottom: 2px solid var(--border);
+    margin: 0 0 8px 32px;
+  }
+
+  .graph-line-demand {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--c-footprint);
+    transform-origin: left center;
+    transform: rotate(-6deg) translateY(-40px) scaleX(1);
+    border-radius: 2px;
+  }
+
+  .graph-line-capacity {
+    position: absolute;
+    bottom: 36px; left: 0; right: 0;
+    height: 3px;
+    background: var(--c-oilsands);
+    border-radius: 2px;
+  }
+
+  .graph-overshoot {
+    position: absolute;
+    bottom: 36px;
+    left: 55%;
+    right: 0;
+    top: 0;
+    background: rgba(232,93,117,0.08);
+    border: 1px dashed rgba(232,93,117,0.3);
+    border-radius: 0 4px 0 0;
+  }
+
+  .graph-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .graph-legend { display: flex; gap: 18px; margin-top: 8px; flex-wrap: wrap; }
+  .g-leg { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .g-leg-dot { width: 24px; height: 3px; border-radius: 2px; flex-shrink: 0; }
+
+  /* Grassy Narrows case study */
+  .case-study {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    border-left: 4px solid var(--c-indigenous);
+    margin-bottom: 24px;
+  }
+  .case-study .case-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--c-indigenous);
+    margin-bottom: 12px;
+  }
 
   @media (max-width: 640px) {
     header { padding: 28px 20px 20px; }
     nav { padding: 12px 20px; }
     main { padding: 24px 20px; }
     .cards-grid { grid-template-columns: 1fr; }
-    .compare-grid { grid-template-columns: 1fr; }
-    .indig-grid { grid-template-columns: 1fr; }
+    .sector-grid { grid-template-columns: 1fr; }
+    .p3-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -430,739 +474,623 @@
 <header>
   <div>
     <div class="badge">📚 Study Hub</div>
-    <h1>Changing<br><span>Populations</span></h1>
-    <p class="subtitle">// demography · pyramids · migration · settlement · density</p>
+    <h1>Managing<br><span>Resources</span></h1>
+    <p class="subtitle">// industries · oil sands · indigenous rights · ecological footprints</p>
   </div>
   <div class="unit-chip">GRADE 9 · ONTARIO GEOGRAPHY</div>
 </header>
 
 <nav>
-  <button class="nav-btn active" data-c="demo"       onclick="show('demo',this)">🔬 Demography & Census</button>
-  <button class="nav-btn"        data-c="pyramid"    onclick="show('pyramid',this)">📊 Pyramids</button>
-  <button class="nav-btn"        data-c="natural"    onclick="show('natural',this)">🌱 Natural Increase</button>
-  <button class="nav-btn"        data-c="indigenous" onclick="show('indigenous',this)">🍁 Indigenous Peoples</button>
-  <button class="nav-btn"        data-c="migration"  onclick="show('migration',this)">✈️ Migration</button>
-  <button class="nav-btn"        data-c="where"      onclick="show('where',this)">🏙️ Where People Live</button>
-  <button class="nav-btn"        data-c="density"    onclick="show('density',this)">📍 Population Density</button>
+  <button class="nav-btn active" data-c="industries" onclick="show('industries',this)">🏭 Industries & Extraction</button>
+  <button class="nav-btn"        data-c="oilsands"   onclick="show('oilsands',this)">🛢️ Oil Sands & Pipelines</button>
+  <button class="nav-btn"        data-c="indigenous" onclick="show('indigenous',this)">🪶 Indigenous Rights</button>
+  <button class="nav-btn"        data-c="footprint"  onclick="show('footprint',this)">🌍 Ecological Footprints</button>
 </nav>
 
 <main>
 
-<!-- =========== DEMOGRAPHY & CENSUS =========== -->
-<div class="section active" id="demo">
+<!-- =========== INDUSTRIES & EXTRACTION =========== -->
+<div class="section active" id="industries">
   <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(78,205,196,0.12);color:var(--c-demo)">🔬</div>
+    <div class="sec-icon" style="background:rgba(78,205,196,0.12);color:var(--c-industries)">🏭</div>
     <div>
-      <div class="sec-title" style="color:var(--c-demo)">Demography &amp; the Census</div>
-      <div class="sec-sub">// what is demography · why it matters · census basics</div>
+      <div class="sec-title" style="color:var(--c-industries)">Industries & Resource Extraction</div>
+      <div class="sec-sub">// primary · secondary · tertiary · P3 impacts · fishing case study · renewable vs non-renewable</div>
     </div>
   </div>
 
-  <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-demo)">
-      <div class="card-title">What Is Demography?</div>
-      <p><em>Demography</em> is the <em>scientific study of human populations</em> — including their size, structure, distribution, and how they change over time through births, deaths, and migration.</p>
-      <br>
-      <p><strong style="color:var(--c-demo)">Why Is It Important?</strong></p>
-      <ul style="margin-top:10px">
-        <li>Helps governments <em>plan services</em> — schools, hospitals, roads, housing</li>
-        <li>Predicts future <em>labour market needs</em> and shortages</li>
-        <li>Informs <em>immigration policy</em> (how many people Canada needs)</li>
-        <li>Helps understand <em>aging populations</em> and pension pressures</li>
-        <li>Used by businesses to target markets and plan locations</li>
-        <li>Allows comparison of well-being between countries (HDI, poverty)</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-demo)">
-      <div class="card-title">What Is a Census?</div>
-      <ul>
-        <li>An <em>official count of every person</em> living in a country at a specific point in time</li>
-        <li>Canada conducts a census every <em>5 years</em> (Statistics Canada)</li>
-        <li>Collects data on: age, gender, language, income, education, housing, ethnicity, immigration status</li>
-        <li>Every household is <em>legally required</em> to respond</li>
-        <li>Canada's census is one of the most detailed in the world</li>
-      </ul>
-      <br>
-      <p><strong style="color:var(--c-demo)">Why Is It Important?</strong></p>
-      <ul style="margin-top:10px">
-        <li>Governments use it to <em>allocate funding</em> (more people = more funding for that region)</li>
-        <li>Determines how many seats each province gets in Parliament</li>
-        <li>Helps track <em>trends over time</em> — aging, urbanization, diversity</li>
-        <li>Essential for planning schools, transit, healthcare facilities</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: Why is demography important for Canada's government?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Demography helps the government understand who lives in Canada now and predict what the population will look like in the future. This is critical for planning — building enough schools for children, hospitals for seniors, allocating funding fairly, and deciding how many immigrants Canada needs to sustain its workforce and economy as the population ages.</div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: What is a census, and why does Canada conduct one every 5 years?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">A census is an official count and survey of every person in the country at a single point in time. Canada conducts one every 5 years because populations change — people are born, die, move, and immigrate — and governments need current, accurate data to make good decisions about funding, services, and policy. Without the census, governments would have to guess how many people need roads, hospitals, and schools.</div>
-  </div>
-</div>
-
-<!-- =========== POPULATION PYRAMIDS =========== -->
-<div class="section" id="pyramid">
-  <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(232,93,117,0.12);color:var(--c-pyramid)">📊</div>
-    <div>
-      <div class="sec-title" style="color:var(--c-pyramid)">Population Pyramids</div>
-      <div class="sec-sub">// how to read · stationary vs expansive · dependency load · baby boom/echo</div>
-    </div>
-  </div>
-
-  <!-- Side-by-side pyramid comparison -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px">
-    <!-- Expansive -->
-    <div class="pyramid-wrap" style="padding:20px">
-      <div class="pyramid-title">① EXPANSIVE Pyramid</div>
-      <div class="pyr-legend">
-        <span><span class="ldot" style="background:var(--c-pyramid)"></span>Male</span>
-        <span><span class="ldot" style="background:var(--accent2)"></span>Female</span>
+  <!-- 3 sectors -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-industries)">The Three Types of Industry</div>
+    <div class="sector-grid">
+      <div class="sector-card" style="border-top:3px solid var(--c-industries)">
+        <div class="sector-label" style="color:var(--c-industries)">① Primary</div>
+        <div class="sector-name" style="color:var(--c-industries)">Extracting Raw Resources</div>
+        <p style="font-size:12.5px;color:var(--text);margin-bottom:10px;line-height:1.5">Directly taking natural resources from the earth or sea. No processing — raw materials only.</p>
+        <ul>
+          <li>Farming / agriculture</li>
+          <li>Fishing and aquaculture</li>
+          <li>Logging / forestry</li>
+          <li>Mining (gold, coal, diamonds)</li>
+          <li>Oil and natural gas extraction</li>
+          <li>Trapping and hunting</li>
+        </ul>
       </div>
-      <div class="pyr-grid" style="max-width:360px;margin:0 auto 8px">
-        <div class="bl" style="width:14px"></div><div class="bl-label">75+</div><div class="br" style="width:16px"></div>
-        <div class="bl" style="width:18px"></div><div class="bl-label">70–74</div><div class="br" style="width:20px"></div>
-        <div class="bl" style="width:26px"></div><div class="bl-label">65–69</div><div class="br" style="width:28px"></div>
-        <div class="bl" style="width:36px"></div><div class="bl-label">60–64</div><div class="br" style="width:36px"></div>
-        <div class="bl" style="width:50px"></div><div class="bl-label">55–59</div><div class="br" style="width:50px"></div>
-        <div class="bl" style="width:64px"></div><div class="bl-label">50–54</div><div class="br" style="width:62px"></div>
-        <div class="bl" style="width:76px"></div><div class="bl-label">45–49</div><div class="br" style="width:74px"></div>
-        <div class="bl" style="width:88px"></div><div class="bl-label">40–44</div><div class="br" style="width:86px"></div>
-        <div class="bl" style="width:98px"></div><div class="bl-label">35–39</div><div class="br" style="width:96px"></div>
-        <div class="bl" style="width:108px"></div><div class="bl-label">30–34</div><div class="br" style="width:106px"></div>
-        <div class="bl" style="width:118px"></div><div class="bl-label">25–29</div><div class="br" style="width:114px"></div>
-        <div class="bl" style="width:126px"></div><div class="bl-label">20–24</div><div class="br" style="width:122px"></div>
-        <div class="bl" style="width:132px"></div><div class="bl-label">15–19</div><div class="br" style="width:128px"></div>
-        <div class="bl" style="width:136px"></div><div class="bl-label">10–14</div><div class="br" style="width:132px"></div>
-        <div class="bl" style="width:140px"></div><div class="bl-label">5–9</div><div class="br" style="width:136px"></div>
-        <div class="bl" style="width:142px"></div><div class="bl-label">0–4</div><div class="br" style="width:140px"></div>
+      <div class="sector-card" style="border-top:3px solid var(--c-oilsands)">
+        <div class="sector-label" style="color:var(--c-oilsands)">② Secondary</div>
+        <div class="sector-name" style="color:var(--c-oilsands)">Processing & Manufacturing</div>
+        <p style="font-size:12.5px;color:var(--text);margin-bottom:10px;line-height:1.5">Taking raw materials from the primary sector and turning them into finished goods.</p>
+        <ul>
+          <li>Car manufacturing</li>
+          <li>Food processing (canning fish)</li>
+          <li>Lumber mills / sawmills</li>
+          <li>Oil refining</li>
+          <li>Steel production</li>
+          <li>Construction</li>
+        </ul>
       </div>
-      <p style="text-align:center;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:8px">Wide base → high birth rate<br>Narrow top → high death rate / low life expectancy<br><span style="color:var(--c-pyramid)">Typical: LEDCs (Nigeria, Afghanistan)</span></p>
-    </div>
-    <!-- Stationary -->
-    <div class="pyramid-wrap" style="padding:20px">
-      <div class="pyramid-title" style="color:var(--c-natural)">② STATIONARY Pyramid</div>
-      <div class="pyr-legend">
-        <span><span class="ldot" style="background:var(--c-natural)"></span>Male</span>
-        <span><span class="ldot" style="background:var(--c-natural)"></span>Female</span>
-      </div>
-      <div class="pyr-grid" style="max-width:360px;margin:0 auto 8px">
-        <div class="bl2" style="width:50px"></div><div class="bl-label">75+</div><div class="br2" style="width:58px"></div>
-        <div class="bl2" style="width:72px"></div><div class="bl-label">70–74</div><div class="br2" style="width:74px"></div>
-        <div class="bl2" style="width:82px"></div><div class="bl-label">65–69</div><div class="br2" style="width:82px"></div>
-        <div class="bl2" style="width:90px"></div><div class="bl-label">60–64</div><div class="br2" style="width:90px"></div>
-        <div class="bl2" style="width:94px"></div><div class="bl-label">55–59</div><div class="br2" style="width:94px"></div>
-        <div class="bl2" style="width:98px"></div><div class="bl-label">50–54</div><div class="br2" style="width:96px"></div>
-        <div class="bl2" style="width:100px"></div><div class="bl-label">45–49</div><div class="br2" style="width:100px"></div>
-        <div class="bl2" style="width:102px"></div><div class="bl-label">40–44</div><div class="br2" style="width:100px"></div>
-        <div class="bl2" style="width:104px"></div><div class="bl-label">35–39</div><div class="br2" style="width:102px"></div>
-        <div class="bl2" style="width:106px"></div><div class="bl-label">30–34</div><div class="br2" style="width:104px"></div>
-        <div class="bl2" style="width:106px"></div><div class="bl-label">25–29</div><div class="br2" style="width:104px"></div>
-        <div class="bl2" style="width:106px"></div><div class="bl-label">20–24</div><div class="br2" style="width:104px"></div>
-        <div class="bl2" style="width:104px"></div><div class="bl-label">15–19</div><div class="br2" style="width:102px"></div>
-        <div class="bl2" style="width:104px"></div><div class="bl-label">10–14</div><div class="br2" style="width:102px"></div>
-        <div class="bl2" style="width:104px"></div><div class="bl-label">5–9</div><div class="br2" style="width:102px"></div>
-        <div class="bl2" style="width:104px"></div><div class="bl-label">0–4</div><div class="br2" style="width:102px"></div>
-      </div>
-      <p style="text-align:center;font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:8px">Nearly equal bars throughout → stable population<br>Low birth rate, low death rate, long life expectancy<br><span style="color:var(--c-natural)">Typical: MEDCs (Sweden, Canada)</span></p>
-    </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-pyramid)">
-      <div class="card-title">What the Pyramid Shape Tells You</div>
-      <ul>
-        <li><em>Wide base (0–14):</em> high birth rate → fast-growing, young population</li>
-        <li><em>Narrow top (65+):</em> high death rate → short life expectancy</li>
-        <li><em>Even/wide top:</em> low death rate → long life expectancy, aging population</li>
-        <li><em>Narrow middle:</em> past wars or emigration reduced that generation</li>
-        <li><em>Bulge in working age (20–40):</em> large immigration wave into that country</li>
-        <li><em>Gender imbalance:</em> wars kill more males → bars unequal on left vs right</li>
-        <li><em>Future growth:</em> wide base = population will grow; narrow base = will shrink</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-pyramid)">
-      <div class="card-title">Dependency Load (Dependency Ratio)</div>
-      <p>The <em>dependency load</em> is the proportion of the population that is <em>not working</em> (dependents) compared to those who are working (supporters).</p>
-      <br>
-      <ul>
-        <li><em>Dependents</em> = children (0–14) + seniors (65+)</li>
-        <li><em>Workers</em> = people aged 15–64</li>
-        <li>High dependency = more strain on working population (more taxes needed)</li>
-        <li>Canada's aging baby boomers are <em>increasing the dependency load</em></li>
-        <li>More seniors per worker → pressure on pensions, healthcare, social programs</li>
-        <li>Immigration helps by adding working-age people to Canada's workforce</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-pyramid); grid-column: 1 / -1;">
-      <div class="card-title">Baby Boom &amp; Baby Boom Echo</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px">
-        <div>
-          <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-pyramid);margin-bottom:8px;letter-spacing:0.05em">BABY BOOM (1946–1965)</p>
-          <ul>
-            <li>Surge of births <em>after World War II</em> — soldiers returned home, families reunited</li>
-            <li>Lasted ~20 years; unusually <em>high birth rates</em> across North America</li>
-            <li>Boomers now aged ~60–79 — <em>aging out</em> of workforce, retiring</li>
-            <li>Shows up as a <em>wide bulge in the middle</em> of Canada's pyramid</li>
-            <li>Creating pressure on healthcare, CPP, and OAS pension systems</li>
-          </ul>
-        </div>
-        <div>
-          <p style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent2);margin-bottom:8px;letter-spacing:0.05em">BABY BOOM ECHO (1980s–1995)</p>
-          <ul>
-            <li>The children of Baby Boomers — a <em>second, smaller surge</em> in births</li>
-            <li>Also called "Echo Boomers" or Millennials</li>
-            <li>Visible as a <em>secondary bulge</em> slightly below the boom bulge</li>
-            <li>Smaller than the original boom because each Boomer had fewer kids</li>
-            <li>Now aged ~30–45 — the <em>core of today's workforce</em></li>
-          </ul>
-        </div>
+      <div class="sector-card" style="border-top:3px solid var(--c-indigenous)">
+        <div class="sector-label" style="color:var(--c-indigenous)">③ Tertiary</div>
+        <div class="sector-name" style="color:var(--c-indigenous)">Services</div>
+        <p style="font-size:12.5px;color:var(--text);margin-bottom:10px;line-height:1.5">Providing services to people rather than making physical goods. Largest sector in developed countries.</p>
+        <ul>
+          <li>Healthcare and hospitals</li>
+          <li>Education / teaching</li>
+          <li>Retail and restaurants</li>
+          <li>Banking and finance</li>
+          <li>Transportation</li>
+          <li>Government and law</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <div class="quiz-box">
-    <div class="quiz-q">Q: A pyramid has a very wide base and a narrow top. What type of pyramid is this, and what does it tell you about the country?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">This is an <strong>Expansive pyramid</strong>. The wide base means a <strong>high birth rate</strong> — many children are being born. The narrow top means a <strong>high death rate and low life expectancy</strong> — few people survive to old age. The population is <strong>young and growing rapidly</strong>. This is typical of Less Economically Developed Countries (LEDCs) where healthcare is limited and families have many children.</div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: What is the dependency load, and why is it increasing in Canada?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">The dependency load is the ratio of non-working people (children 0–14 and seniors 65+) to working-age people (15–64). It is increasing in Canada because the Baby Boomers (born 1946–1965) are now retiring, creating a large wave of seniors who no longer work and who rely on pensions and healthcare. At the same time, Canada's birth rate is low (below replacement level), so there are fewer young people entering the workforce to support them. This means fewer workers are paying taxes to fund more services for more dependents.</div>
-  </div>
-</div>
-
-<!-- =========== NATURAL INCREASE =========== -->
-<div class="section" id="natural">
-  <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(149,224,108,0.12);color:var(--c-natural)">🌱</div>
-    <div>
-      <div class="sec-title" style="color:var(--c-natural)">Natural Increase</div>
-      <div class="sec-sub">// trends in Canada · fertility rate · baby boom impacts · aging population</div>
+  <!-- P3 impacts -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-industries)">Impacts of Resource Extraction — The P3 Framework</div>
+    <div class="info-block" style="--ca:var(--c-industries)">
+      Every resource extraction project creates impacts across three dimensions: <strong>People</strong> (social/human impacts), <strong>Planet</strong> (environmental impacts), and <strong>Profit</strong> (economic impacts). You need to be able to evaluate any resource using P3.
     </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-natural)">
-      <div class="card-title">Natural Increase — Canadian Trends</div>
-      <ul>
-        <li><em>Natural Increase = Birth Rate − Death Rate</em></li>
-        <li>Canada's natural increase has been <em>declining</em> for decades</li>
-        <li>Birth rate has fallen steadily since the post-WWII baby boom</li>
-        <li>Canada's current fertility rate (~1.4) is <em>below replacement level</em> (2.1)</li>
-        <li>This means Canada <em>cannot grow naturally</em> — deaths will eventually exceed births without immigration</li>
-        <li>Canada relies heavily on <em>immigration</em> to maintain population growth</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-natural)">
-      <div class="card-title">Fertility Rate — Definition &amp; Trend</div>
-      <p>The <em>fertility rate (TFR)</em> is the average number of children a woman is expected to have over her lifetime.</p>
-      <br>
-      <ul>
-        <li><em>Replacement rate = 2.1</em> children per woman (needed to keep population stable)</li>
-        <li>Canada's current TFR ≈ <em>1.4</em> — well below replacement</li>
-        <li><strong style="color:var(--c-natural)">Why is it declining?</strong></li>
-        <li>Women pursuing higher education and careers → having children later (or not at all)</li>
-        <li>High cost of living, housing, and childcare</li>
-        <li>Shift from rural (children = labour) to urban (children = expense) lifestyle</li>
-        <li>Greater access to contraception and family planning</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-natural)">
-      <div class="card-title">Impacts of the Baby Boom &amp; Aging Population</div>
-      <ul>
-        <li>Baby Boomers (born 1946–1965) are now <em>retiring in large waves</em></li>
-        <li>More retirees drawing on <em>Canada Pension Plan (CPP)</em> and healthcare</li>
-        <li>Fewer workers paying into social programs → <em>financial strain</em></li>
-        <li>Demand for <em>seniors services</em> — long-term care homes, hospitals — increasing rapidly</li>
-        <li>Many skilled Boomers leaving the workforce creates <em>labour shortages</em> (e.g., nursing, trades)</li>
-        <li>Government increasing immigration targets to fill workforce gaps</li>
-        <li>Growing strain on younger generations (Echo Boomers / Millennials) who must support more retirees</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-natural)">
-      <div class="card-title">Why Canada Needs Immigration</div>
-      <ul>
-        <li>Natural increase alone is <em>insufficient</em> to grow the population</li>
-        <li>Without immigration, workforce would <em>shrink</em> as boomers retire</li>
-        <li>Immigration brings <em>younger, working-age people</em> who pay taxes</li>
-        <li>Helps fill <em>skilled labour gaps</em> in healthcare, tech, trades</li>
-        <li>Contributes to <em>economic growth</em> — immigrants start businesses, spend money</li>
-        <li>Canada's immigration target: ~500,000 per year by 2025</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: What is the fertility rate, and what is the trend in Canada? Why does this matter?</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">The <strong>fertility rate (TFR)</strong> is the average number of children a woman will have in her lifetime. Canada's current TFR is approximately <strong>1.4</strong>, which is well below the <strong>replacement rate of 2.1</strong>. This means that without immigration, Canada's population would eventually start declining. The trend is driven by women pursuing education and careers, the high cost of raising children in cities, and shifting cultural values. This matters because a shrinking population means fewer workers, less tax revenue, and more pressure on social programs like healthcare and pensions.</div>
-  </div>
-</div>
-
-<!-- =========== INDIGENOUS PEOPLES =========== -->
-<div class="section" id="indigenous">
-  <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(247,163,92,0.12);color:var(--c-indigenous)">🍁</div>
-    <div>
-      <div class="sec-title" style="color:var(--c-indigenous)">Canada's Indigenous Population</div>
-      <div class="sec-sub">// First Nations · Métis · Inuit · key facts</div>
-    </div>
-  </div>
-
-  <div class="indig-grid">
-    <div class="indig-card">
-      <div class="indig-name">First Nations</div>
-      <ul>
-        <li>Largest Indigenous group in Canada</li>
-        <li>Over <em>630 recognized First Nations communities</em></li>
-        <li>Live on-reserve and off-reserve (cities)</li>
-        <li>Diverse — hundreds of distinct nations, languages, cultures</li>
-        <li>Governed by the <em>Indian Act</em> (a federal law, often criticized)</li>
-        <li>Examples: Ojibwe, Cree, Mohawk, Mi'kmaq, Haida</li>
-      </ul>
-    </div>
-    <div class="indig-card">
-      <div class="indig-name">Métis</div>
-      <ul>
-        <li>People of <em>mixed Indigenous and European ancestry</em></li>
-        <li>Emerged through relationships between First Nations women and European (mainly French) fur traders</li>
-        <li>Distinct culture, language (Michif), and traditions</li>
-        <li>Strong historical presence in <em>western Canada</em> (Manitoba, Saskatchewan)</li>
-        <li>Led by Louis Riel — key figure in Métis resistance (Red River and Northwest Resistances)</li>
-      </ul>
-    </div>
-    <div class="indig-card">
-      <div class="indig-name">Inuit</div>
-      <ul>
-        <li>Indigenous peoples of <em>Arctic Canada</em> (Nunavut, NWT, northern Québec, Labrador)</li>
-        <li>Smallest of the three groups</li>
-        <li>Adapted to extreme northern environments</li>
-        <li>Traditional practices: hunting (seals, whales, caribou), fishing, dog sledding</li>
-        <li>Language: <em>Inuktitut</em></li>
-        <li>Nunavut (created 1999) is a self-governing Inuit territory</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-indigenous)">
-      <div class="card-title">Key Population Facts</div>
-      <ul>
-        <li>Indigenous peoples make up about <em>5% of Canada's population</em></li>
-        <li>One of the <em>fastest-growing populations</em> in Canada</li>
-        <li>Young population — median age is lower than the Canadian average</li>
-        <li>About <em>60% of First Nations members live off-reserve</em>, many in cities</li>
-        <li>Winnipeg and Vancouver have some of the largest urban Indigenous populations</li>
-        <li>Indigenous population growing rapidly due to higher birth rates and improved census identification</li>
-      </ul>
-    </div>
-    <div class="card" style="--ca:var(--c-indigenous)">
-      <div class="card-title">Context &amp; Challenges</div>
-      <ul>
-        <li>Legacy of colonialism, residential schools, and loss of land</li>
-        <li>Higher rates of poverty, housing insecurity, and health issues</li>
-        <li>Ongoing land claims and treaty negotiations</li>
-        <li>Calls to Action from <em>Truth and Reconciliation Commission (TRC)</em></li>
-        <li>Growing political representation and self-governance movements</li>
-        <li>Important role in Canadian identity, culture, and environmental stewardship</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="quiz-box">
-    <div class="quiz-q">Q: Name the three groups of Indigenous peoples in Canada and briefly describe each.</div>
-    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans"><strong>First Nations:</strong> The largest Indigenous group with over 630 communities and hundreds of distinct languages and cultures. They live both on-reserve and in cities across Canada.<br><br><strong>Métis:</strong> People of mixed Indigenous and European ancestry, emerging from relationships between First Nations women and European (mostly French) fur traders. They have their own distinct culture and language (Michif), with roots especially in western Canada.<br><br><strong>Inuit:</strong> Indigenous peoples of the Arctic North (Nunavut, northern Quebec, Labrador, NWT). They are adapted to extreme northern environments, speak Inuktitut, and have their own territory of Nunavut (1999).</div>
-  </div>
-</div>
-
-<!-- =========== MIGRATION =========== -->
-<div class="section" id="migration">
-  <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(179,136,255,0.12);color:var(--c-migration)">✈️</div>
-    <div>
-      <div class="sec-title" style="color:var(--c-migration)">Migration</div>
-      <div class="sec-sub">// immigration vs emigration · push/pull · 3 classes · points system</div>
-    </div>
-  </div>
-
-  <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-migration)">
-      <div class="card-title">Immigration vs. Emigration</div>
-      <ul>
-        <li><em>Immigration:</em> moving <em>into</em> a country permanently — Canada is the destination</li>
-        <li><em>Emigration:</em> moving <em>out of</em> a country permanently — Canada is the origin</li>
-        <li><em>Immigrant:</em> a person who arrives in a new country to live</li>
-        <li><em>Emigrant:</em> a person who has left their home country</li>
-        <li><em>Net Migration:</em> Immigration − Emigration = the net gain or loss of people</li>
-        <li>Canada gains far more immigrants than it loses emigrants → positive net migration</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-migration)">
-      <div class="card-title">Immigration Trends in Canada</div>
-      <ul>
-        <li>Canada accepts ~400,000–500,000 immigrants per year (one of the highest rates per capita in the world)</li>
-        <li>Before 1967: most immigrants came from <em>Europe</em> (UK, Italy, Germany, Ukraine)</li>
-        <li>After 1967 points system: opened to all countries equally → shift toward Asia, Caribbean, Africa</li>
-        <li>Top source countries today: <em>India, China, Philippines, Nigeria, Pakistan</em></li>
-        <li>Immigration is Canada's <em>primary source of population growth</em> (natural increase is too low)</li>
-        <li>Targets increasing to fill aging workforce gaps</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-migration)">
-      <div class="card-title">Push Factors</div>
-      <p style="margin-bottom:10px;color:var(--muted);font-size:12.5px">Negative conditions that drive people to <em>leave</em> their home country:</p>
-      <ul>
-        <li>War, armed conflict, and political instability</li>
-        <li>Political persecution or lack of freedom</li>
-        <li>Extreme poverty and unemployment</li>
-        <li>Famine, drought, or natural disasters</li>
-        <li>Lack of healthcare or educational opportunities</li>
-        <li>Religious or ethnic persecution</li>
-        <li>Environmental degradation (pollution, climate change)</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-migration)">
-      <div class="card-title">Pull Factors</div>
-      <p style="margin-bottom:10px;color:var(--muted);font-size:12.5px">Positive conditions that attract people <em>to</em> Canada:</p>
-      <ul>
-        <li>Job opportunities and strong economy</li>
-        <li>Political stability and freedom</li>
-        <li>High standard of living</li>
-        <li>Universal healthcare and social programs</li>
-        <li>Excellent education system</li>
-        <li>Family members already living in Canada</li>
-        <li>Canada's reputation as multicultural and welcoming</li>
-        <li>Safe environment, rule of law</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- 3 immigrant classes -->
-  <div class="pyramid-wrap">
-    <div class="pyramid-title" style="color:var(--c-migration);margin-bottom:16px">Canada's 3 Immigration Classes</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-      <div style="background:var(--surface2);padding:16px;border-radius:8px;border-left:3px solid var(--c-migration)">
-        <strong style="color:var(--c-migration);font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-bottom:8px">① ECONOMIC CLASS (~58%)</strong>
-        <p style="font-size:13px;line-height:1.5">Selected using the <em>points system</em>. Immigrants chosen for their ability to work and contribute economically. Includes Skilled Workers, Trades Workers, and Business Immigrants.</p>
+    <div class="p3-grid">
+      <div class="p3-card" style="--ca:#5b8dee">
+        <span class="p3-label">👥 People</span>
+        <ul>
+          <li>Jobs created in local communities</li>
+          <li>Health risks from pollution or toxic exposure</li>
+          <li>Displacement of Indigenous or local communities</li>
+          <li>Infrastructure built (roads, schools, hospitals)</li>
+          <li>Safety hazards for workers</li>
+          <li>Cultural impacts on traditional ways of life</li>
+          <li>Access to food, water, livelihoods</li>
+        </ul>
       </div>
-      <div style="background:var(--surface2);padding:16px;border-radius:8px;border-left:3px solid var(--c-migration)">
-        <strong style="color:var(--c-migration);font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-bottom:8px">② FAMILY CLASS (~27%)</strong>
-        <p style="font-size:13px;line-height:1.5">Sponsored by a Canadian citizen or permanent resident. Includes spouses, common-law partners, dependent children, parents, and grandparents. The sponsor must financially support the newcomer.</p>
+      <div class="p3-card" style="--ca:var(--c-footprint)">
+        <span class="p3-label">🌍 Planet</span>
+        <ul>
+          <li>Habitat destruction and deforestation</li>
+          <li>Water and air pollution</li>
+          <li>Soil degradation and erosion</li>
+          <li>Loss of biodiversity (species decline)</li>
+          <li>Carbon emissions / climate change</li>
+          <li>Oil spills and toxic runoff</li>
+          <li>Long-term ecosystem damage</li>
+        </ul>
       </div>
-      <div style="background:var(--surface2);padding:16px;border-radius:8px;border-left:3px solid var(--c-migration)">
-        <strong style="color:var(--c-migration);font-family:'JetBrains Mono',monospace;font-size:11px;display:block;margin-bottom:8px">③ REFUGEE CLASS (~15%)</strong>
-        <p style="font-size:13px;line-height:1.5">People fleeing war, persecution, or danger. Includes Government-Assisted Refugees (GARs), Privately Sponsored Refugees, and Asylum Seekers who claim protection after arriving in Canada.</p>
+      <div class="p3-card" style="--ca:var(--c-oilsands)">
+        <span class="p3-label">💰 Profit</span>
+        <ul>
+          <li>Revenue for companies and governments (taxes)</li>
+          <li>Export income for Canada</li>
+          <li>Economic spin-off industries</li>
+          <li>Cost of cleanup and environmental remediation</li>
+          <li>Cost of healthcare for affected communities</li>
+          <li>Long-term vs. short-term economic thinking</li>
+          <li>Community royalties or compensation</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <!-- Points system -->
-  <div class="pyramid-wrap" style="margin-bottom:24px">
-    <div class="pyramid-title" style="color:var(--c-demo)">The Points System — Economic Immigration</div>
-    <div class="info-block" style="--ca:var(--c-demo);margin-bottom:16px">
-      Applicants are scored out of <strong>100 points</strong> across 6 categories. A minimum of <strong>67 points</strong> is typically required to qualify. The system selects immigrants most likely to succeed economically in Canada.
+  <!-- Fishing case study -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-industries)">Case Study: The Fishing Industry</div>
+    <div class="cards-grid" style="margin-bottom:0">
+      <div class="card" style="--ca:var(--c-industries)">
+        <div class="card-title">Overview</div>
+        <ul>
+          <li>Fishing is a <em>primary industry</em> — extracting fish from the ocean or freshwater</li>
+          <li>Canada has one of the world's longest coastlines → rich fishing grounds</li>
+          <li>Major areas: Grand Banks (Atlantic cod), Pacific salmon, lobster (Nova Scotia)</li>
+          <li>Employs thousands in coastal communities; part of cultural identity</li>
+          <li>Fish processing (canning, freezing) is a <em>secondary industry</em> linked to it</li>
+          <li>Over-fishing led to the collapse of the <em>Atlantic cod fishery (1992)</em> — a major case study in resource mismanagement</li>
+        </ul>
+      </div>
+      <div class="card" style="--ca:var(--c-industries)">
+        <div class="card-title">P3 — Fishing Impacts</div>
+        <ul>
+          <li><em>People (+):</em> Provides jobs and food; supports Indigenous fishing rights and traditions</li>
+          <li><em>People (−):</em> Collapse of cod destroyed thousands of jobs and devastated coastal communities</li>
+          <li><em>Planet (−):</em> Over-fishing depletes populations; bycatch (unintended catch) kills non-target species; habitat damage from trawling</li>
+          <li><em>Planet (+):</em> Sustainable quotas and marine protected areas (MPAs) help stocks recover</li>
+          <li><em>Profit (+):</em> Profitable industry; export value; tourism (sport fishing)</li>
+          <li><em>Profit (−):</em> Moratorium on cod (1992) cost $400M+ in unemployment benefits</li>
+        </ul>
+      </div>
     </div>
-    <div class="table-wrap" style="margin-bottom:0">
+  </div>
+
+  <!-- Renewable vs Non-Renewable -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-industries)">Renewable vs. Non-Renewable Resources</div>
+    <div class="table-wrap" style="margin-bottom:16px">
       <table>
         <thead>
           <tr>
-            <th>Factor</th>
-            <th>Max Points</th>
-            <th>Why Canada Values It</th>
+            <th>Type</th>
+            <th>Definition</th>
+            <th>Examples</th>
+            <th>Key Issue</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong style="color:var(--c-demo)">① Education</strong></td>
-            <td><span class="pts-max">25 pts</span></td>
-            <td>Higher education = more skills. PhD/Master's = 25 pts. Bachelor's ≈ 20 pts. More educated → more productive worker.</td>
+            <td><strong style="color:var(--c-footprint)">Renewable</strong></td>
+            <td>Can be replenished naturally within a human timescale if managed well</td>
+            <td>Solar, wind, hydro, forests, fish, crops</td>
+            <td>Can become non-renewable if overused (e.g. overfishing, deforestation)</td>
           </tr>
           <tr>
-            <td><strong style="color:var(--c-demo)">② Language Skills</strong></td>
-            <td><span class="pts-max">28 pts</span></td>
-            <td>English and/or French fluency. Tested via IELTS or TEF. Better language = better integration, employment, and communication.</td>
+            <td><strong style="color:var(--c-oilsands)">Non-Renewable</strong></td>
+            <td>Formed over millions of years; once used, cannot be replaced on a human timescale</td>
+            <td>Oil, natural gas, coal, minerals, nuclear (uranium)</td>
+            <td>Finite supply; extraction causes significant environmental damage</td>
           </tr>
           <tr>
-            <td><strong style="color:var(--c-demo)">③ Work Experience</strong></td>
-            <td><span class="pts-max">15 pts</span></td>
-            <td>Skilled work experience in the last 10 years. Proven ability to work → less risk of unemployment in Canada.</td>
+            <td><strong style="color:var(--c-industries)">Flow Resources</strong></td>
+            <td>Continuously available — exist regardless of whether we use them</td>
+            <td>Solar energy, wind, tidal/wave energy</td>
+            <td>Cannot be stored easily; location-dependent</td>
           </tr>
           <tr>
-            <td><strong style="color:var(--c-demo)">④ Age</strong></td>
-            <td><span class="pts-max">12 pts</span></td>
-            <td>Max points ages 18–35. Younger workers have more years to contribute taxes and fill labour needs before retiring.</td>
-          </tr>
-          <tr>
-            <td><strong style="color:var(--c-demo)">⑤ Job Offer</strong></td>
-            <td><span class="pts-max">10 pts</span></td>
-            <td>Arranged employment with a Canadian employer. Reduces unemployment risk; fills identified labour shortages immediately.</td>
-          </tr>
-          <tr>
-            <td><strong style="color:var(--c-demo)">⑥ Adaptability</strong></td>
-            <td><span class="pts-max">10 pts</span></td>
-            <td>Previous study/work in Canada, relatives in Canada, spouse's education/language. More ties = easier settlement and success.</td>
+            <td><strong style="color:var(--c-industries)">Instream Resources</strong></td>
+            <td>Used directly as they flow — must be used where they occur</td>
+            <td>Hydroelectric (flowing water), tidal power</td>
+            <td>Dams affect fish migration and downstream ecosystems</td>
           </tr>
         </tbody>
       </table>
     </div>
+    <div class="info-block" style="--ca:var(--c-footprint)">
+      <strong>Key idea:</strong> Renewable does NOT mean unlimited. Fish are renewable — but the 1992 cod collapse showed that even renewable resources can be destroyed by over-extraction. Sustainability requires using resources at or below the rate they can naturally replenish.
+    </div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: What is the difference between a push and pull factor? Give one example of each for someone coming to Canada.</div>
+    <div class="quiz-q">Q: What is the difference between primary, secondary, and tertiary industries? Give one example of each.</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans"><strong>Push factor:</strong> A negative condition that forces or motivates someone to LEAVE their home country. Example: fleeing a civil war in Syria, or leaving a country with high unemployment and no economic opportunities.<br><br><strong>Pull factor:</strong> A positive condition that ATTRACTS someone to Canada specifically. Example: Canada's reputation for safety, universal healthcare, job opportunities, or having family already living here. Both push and pull factors work together to drive someone's decision to migrate.</div>
+    <div class="quiz-ans"><strong>Primary:</strong> Directly extracting raw natural resources from the earth. Example: mining, logging, fishing.<br><br><strong>Secondary:</strong> Taking raw materials and processing or manufacturing them into finished goods. Example: a sawmill turning logs into lumber, or a cannery processing fish.<br><br><strong>Tertiary:</strong> Providing services rather than producing goods. Example: teaching, healthcare, banking, retail stores. In developed countries like Canada, most people work in the tertiary sector.</div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: What are the three main classes of immigrants Canada accepts? Which is the largest?</div>
+    <div class="quiz-q">Q: Using the P3 framework, explain one positive and one negative impact of the Canadian fishing industry on the Planet.</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">The three classes are: <strong>(1) Economic Class</strong> (~58%) — the largest group, selected through the points system based on skills and ability to work. <strong>(2) Family Class</strong> (~27%) — sponsored by a Canadian citizen or permanent resident (spouses, children, parents). <strong>(3) Refugee Class</strong> (~15%) — people fleeing war, persecution, or danger. The <strong>Economic Class</strong> is by far the largest.</div>
+    <div class="quiz-ans"><strong>Negative (Planet):</strong> Overfishing depletes fish populations. The collapse of the Atlantic cod fishery in 1992 is a key example — decades of intensive fishing removed cod faster than they could reproduce, causing a near-total population collapse. Bottom trawling also destroys seafloor habitats and creates significant bycatch (unintended species caught and killed).<br><br><strong>Positive (Planet):</strong> Fishing quotas, moratoriums (bans), and Marine Protected Areas (MPAs) can allow fish stocks to recover over time. When managed sustainably, the fishing industry can harvest food without permanently damaging marine ecosystems.</div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: Why does Canada give the most points for "Language Skills" in the immigration points system?</div>
+    <div class="quiz-q">Q: What is the difference between a renewable and a non-renewable resource? Can a renewable resource ever "run out"?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Language skills earn the most points (28/100) because being able to communicate in English or French is essential for <strong>getting a job, integrating into society, and being self-sufficient</strong> in Canada. Immigrants who can't speak an official language struggle to find work and may require more government support. Strong language skills also help immigrants communicate with coworkers, use services, and participate in the community — making them more likely to succeed and contribute to the economy.</div>
+    <div class="quiz-ans">A <strong>renewable resource</strong> can replenish itself naturally within a human timescale (e.g. fish, trees, solar energy). A <strong>non-renewable resource</strong> was formed over millions of years and cannot be replaced once used (e.g. oil, coal, natural gas).<br><br>Yes — a renewable resource CAN effectively run out if we use it faster than it can replenish itself. The Atlantic cod collapse is the classic example: cod are biologically renewable (they reproduce), but decades of overfishing removed them faster than they could breed, causing a functional collapse. This is why sustainability — using resources at a rate nature can sustain — is so important.</div>
   </div>
 </div>
 
-<!-- =========== WHERE PEOPLE LIVE =========== -->
-<div class="section" id="where">
+<!-- =========== OIL SANDS & PIPELINES =========== -->
+<div class="section" id="oilsands">
   <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(91,141,238,0.12);color:var(--c-where)">🏙️</div>
+    <div class="sec-icon" style="background:rgba(247,163,92,0.12);color:var(--c-oilsands)">🛢️</div>
     <div>
-      <div class="sec-title" style="color:var(--c-where)">Where People Live</div>
-      <div class="sec-sub">// population distribution · top 3 cities · rural vs urban · 4 settlement patterns</div>
+      <div class="sec-title" style="color:var(--c-oilsands)">Oil Sands & Pipelines</div>
+      <div class="sec-sub">// what are they · key issues · P3 impacts</div>
     </div>
   </div>
 
   <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-where)">
-      <div class="card-title">Population Distribution in Canada</div>
+    <div class="card" style="--ca:var(--c-oilsands)">
+      <div class="card-title">What Are the Oil Sands?</div>
       <ul>
-        <li>Canada is the <em>2nd largest country by area</em> but has a relatively small population (~40 million)</li>
-        <li>Population is <em>very unevenly distributed</em> — most people live in a narrow strip along the US border</li>
-        <li>About <em>90% of Canadians</em> live within 200 km of the US border</li>
-        <li>Southern Ontario and Québec have the highest concentrations</li>
-        <li>Northern Canada (Nunavut, NWT, Yukon) = vast area but tiny population</li>
-        <li><em>Why?</em> Milder climate, better agricultural land, more job opportunities, historical settlement routes</li>
+        <li>Located mainly in <em>northern Alberta</em> (Athabasca Oil Sands)</li>
+        <li>A mixture of sand, water, clay, and a thick, heavy oil called <em>bitumen</em></li>
+        <li>Canada has the <em>3rd largest oil reserves in the world</em> — mostly in the oil sands</li>
+        <li>Bitumen must be extracted then <em>upgraded / refined</em> before use</li>
+        <li>Two extraction methods:
+          <ul style="margin-top:6px;margin-left:8px">
+            <li><em>Open-pit mining:</em> strip away the boreal forest and dig up the sand — used when oil is near the surface</li>
+            <li><em>In-situ (SAGD):</em> inject steam deep underground to loosen bitumen so it flows up — less surface disturbance</li>
+          </ul>
+        </li>
+        <li>Requires massive amounts of <em>water and energy</em> to process</li>
       </ul>
     </div>
 
-    <div class="card" style="--ca:var(--c-where)">
-      <div class="card-title">Top 3 Immigrant Destination Cities</div>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
-        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--c-where)">
-          <strong style="color:var(--c-where);font-size:13px">① Toronto (GTA), Ontario</strong>
-          <p style="font-size:12.5px;margin-top:4px;color:var(--muted)">Canada's largest city and #1 destination — receives ~50% of Ontario's immigrants. One of the world's most multicultural cities. Major economic hub.</p>
-        </div>
-        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--c-where)">
-          <strong style="color:var(--c-where);font-size:13px">② Vancouver, British Columbia</strong>
-          <p style="font-size:12.5px;margin-top:4px;color:var(--muted)">2nd largest immigrant hub. Strong Pacific ties attract immigrants from China, Philippines, South Korea, and India. Mild climate is a pull factor.</p>
-        </div>
-        <div style="background:var(--surface2);padding:12px;border-radius:6px;border-left:3px solid var(--c-where)">
-          <strong style="color:var(--c-where);font-size:13px">③ Montréal, Québec</strong>
-          <p style="font-size:12.5px;margin-top:4px;color:var(--muted)">Québec selects its own immigrants (must speak French). Large Francophone immigrant community from North Africa, Caribbean, and France.</p>
-        </div>
-      </div>
+    <div class="card" style="--ca:var(--c-oilsands)">
+      <div class="card-title">What Are Pipelines?</div>
+      <ul>
+        <li>Underground pipes used to transport <em>oil, bitumen, and natural gas</em> across long distances</li>
+        <li>Canada has one of the world's largest pipeline networks</li>
+        <li>Key pipelines: <em>Trans Mountain (Alberta → BC coast), Keystone XL</em> (controversial — cancelled), Line 5</li>
+        <li>Pipelines are more <em>efficient and lower-emission than tanker trucks or rail</em> for transport</li>
+        <li>But pipeline <em>leaks and spills</em> are a major environmental and political concern</li>
+        <li>Building pipelines requires crossing through <em>Indigenous territories</em> — major rights issue</li>
+      </ul>
     </div>
   </div>
 
-  <!-- Rural vs Urban -->
-  <div class="pyramid-wrap" style="margin-bottom:24px">
-    <div class="pyramid-title" style="color:var(--c-where);margin-bottom:16px">Rural vs. Urban Living</div>
-    <div class="compare-grid" style="margin-bottom:0">
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-natural);margin-bottom:12px">URBAN — Advantages</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> More job opportunities across many industries</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Better access to hospitals, specialists, services</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> More schools, universities, cultural events</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Public transit — less reliance on a car</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Diverse communities, restaurants, entertainment</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Immigrant services (ESL, settlement agencies)</li>
+  <!-- Issues -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-oilsands)">Key Issues with Oil Sands & Pipelines</div>
+    <div class="cards-grid" style="margin-bottom:0">
+      <div class="card" style="--ca:var(--c-oilsands)">
+        <div class="card-title">Environmental Issues</div>
+        <ul>
+          <li>Oil sands produce <em>3× more GHG emissions</em> per barrel than conventional oil — major climate impact</li>
+          <li>Massive <em>tailings ponds</em> — toxic wastewater lakes that can leak into groundwater and rivers</li>
+          <li><em>Boreal forest destruction:</em> thousands of km² of forest cleared for open-pit mining</li>
+          <li>Water use: extracting 1 barrel of oil requires <em>2–4 barrels of water</em></li>
+          <li>Pipeline spills contaminate rivers, soil, and drinking water</li>
+          <li>Habitat destruction affects <em>woodland caribou, migratory birds</em>, and other species</li>
         </ul>
       </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-pyramid);margin-bottom:12px">URBAN — Disadvantages</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Very high housing costs (Toronto, Vancouver)</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Traffic congestion and long commutes</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Higher cost of living overall</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Pollution, noise, overcrowding</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Less green space and nature access</li>
-        </ul>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-natural);margin-bottom:12px">RURAL — Advantages</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Lower housing and land costs</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> More space, access to nature</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Quieter, slower pace of life</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Stronger sense of community</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-natural)">✓</span> Less pollution and traffic</li>
-        </ul>
-      </div>
-      <div>
-        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-pyramid);margin-bottom:12px">RURAL — Disadvantages</div>
-        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Fewer job opportunities</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Less access to hospitals and specialists</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Fewer schools, colleges, entertainment</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Need a car — no public transit</li>
-          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-pyramid)">✗</span> Less diversity and fewer services for newcomers</li>
+      <div class="card" style="--ca:var(--c-oilsands)">
+        <div class="card-title">Political & Social Issues</div>
+        <ul>
+          <li><em>Western alienation:</em> Alberta argues Ontario and Québec block pipelines while benefiting from equalization payments funded by oil revenue</li>
+          <li>Pipeline routes cross <em>Indigenous territories without proper consent</em> — violation of UNDRIP</li>
+          <li>Federal vs. provincial jurisdiction: Who controls resources? Who approves pipelines?</li>
+          <li>Keystone XL: US cancelled it citing climate concerns — lost billions in Canadian investment</li>
+          <li>Jobs debate: thousands of high-paying jobs vs. long-term environmental damage</li>
+          <li>Energy security: Canada relies on US markets — no east-west pipeline, so no way to sell oil to Europe or Asia easily</li>
         </ul>
       </div>
     </div>
   </div>
 
-  <!-- 4 Settlement Patterns -->
-  <div class="pyramid-wrap" style="margin-bottom:24px">
-    <div class="pyramid-title" style="color:var(--c-where);margin-bottom:16px">4 Settlement Patterns</div>
-    <div class="settle-patterns">
-      <div class="sp-card">
-        <div class="sp-icon">🌊</div>
-        <div class="sp-name">Linear / Along Water</div>
-        <div class="sp-desc">Settlements along rivers, lakes, or coastlines. Early Canadian settlements followed waterways (St. Lawrence, Great Lakes). Water = transportation route + fresh water + fish.</div>
+  <!-- P3 for oil sands -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-oilsands)">Oil Sands P3 Analysis</div>
+    <div class="p3-grid">
+      <div class="p3-card" style="--ca:#5b8dee">
+        <span class="p3-label">👥 People</span>
+        <ul>
+          <li><strong style="color:#5b8dee;font-size:11px">POSITIVE</strong></li>
+          <li>High-paying jobs (avg. $100K+/yr in Fort McMurray)</li>
+          <li>Economic booms for Alberta communities</li>
+          <li>Government revenue funds public services</li>
+          <li style="margin-top:6px"><strong style="color:var(--accent3);font-size:11px">NEGATIVE</strong></li>
+          <li>Displacement of Indigenous communities</li>
+          <li>Health concerns: cancer clusters near tailings ponds (e.g. Fort Chipewyan)</li>
+          <li>Boom-bust cycle: workers lose jobs when oil prices crash</li>
+          <li>Mental health issues tied to "fly-in/fly-out" work culture</li>
+        </ul>
       </div>
-      <div class="sp-card">
-        <div class="sp-icon">🛣️</div>
-        <div class="sp-name">Linear / Along Roads</div>
-        <div class="sp-desc">Settlements that develop along roads or railways. Homes/businesses line the main road. Common in Quebec's seigneurial system (long, narrow lots along roads).</div>
+      <div class="p3-card" style="--ca:var(--c-footprint)">
+        <span class="p3-label">🌍 Planet</span>
+        <ul>
+          <li><strong style="color:var(--c-footprint);font-size:11px">POSITIVE</strong></li>
+          <li>Reclamation efforts: companies required to restore mined land</li>
+          <li>In-situ (SAGD) method reduces surface disturbance</li>
+          <li style="margin-top:6px"><strong style="color:var(--accent3);font-size:11px">NEGATIVE</strong></li>
+          <li>Massive GHG emissions — Canada's single largest source</li>
+          <li>Tailings ponds toxic to wildlife (bird deaths)</li>
+          <li>Boreal forest loss — critical carbon sink destroyed</li>
+          <li>Water contamination downstream (Athabasca River)</li>
+          <li>Reclamation is slow and incomplete</li>
+        </ul>
       </div>
-      <div class="sp-card">
-        <div class="sp-icon">🔵</div>
-        <div class="sp-name">Clustered / Nucleated</div>
-        <div class="sp-desc">Homes and buildings grouped closely together around a central point (church, market square). Common in Quebec villages, European-style towns. Easier to share services and defense.</div>
-      </div>
-      <div class="sp-card">
-        <div class="sp-icon">🌾</div>
-        <div class="sp-name">Dispersed / Scattered</div>
-        <div class="sp-desc">Buildings spread widely across the landscape with no clear centre. Common in farming areas (Prairies) where large land grants spread farms far apart. Each farm is self-sufficient.</div>
+      <div class="p3-card" style="--ca:var(--c-oilsands)">
+        <span class="p3-label">💰 Profit</span>
+        <ul>
+          <li><strong style="color:var(--c-oilsands);font-size:11px">POSITIVE</strong></li>
+          <li>Canada earns billions in oil export revenue</li>
+          <li>Alberta Heritage Trust Fund (oil savings)</li>
+          <li>Federal royalties and corporate taxes</li>
+          <li style="margin-top:6px"><strong style="color:var(--accent3);font-size:11px">NEGATIVE</strong></li>
+          <li>High extraction costs — only profitable at high oil prices</li>
+          <li>Cleanup and reclamation costs are enormous</li>
+          <li>Long-term liability: taxpayers may pay for abandoned sites</li>
+          <li>Stranded asset risk if world moves to clean energy</li>
+        </ul>
       </div>
     </div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: Why do most immigrants to Canada settle in Toronto, Vancouver, or Montréal rather than rural areas?</div>
+    <div class="quiz-q">Q: What are the oil sands, and why are they environmentally controversial?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Several pull factors draw immigrants to these cities: <strong>(1) Employment</strong> — large urban economies offer more jobs across many sectors. <strong>(2) Established ethnic communities</strong> — existing diaspora communities provide language support, cultural familiarity, and social networks. <strong>(3) Settlement services</strong> — ESL programs, immigrant support agencies, and social services are concentrated in cities. <strong>(4) Family connections</strong> — family-class immigrants follow sponsors who already live in cities. <strong>(5) Public transit</strong> — immigrants can get around without owning a car. Rural areas lack most of these supports.</div>
+    <div class="quiz-ans">The oil sands are deposits of <strong>bitumen</strong> (heavy crude oil) mixed with sand, water, and clay, found mainly in northern Alberta. They are controversial because extraction is <strong>highly destructive</strong>: open-pit mining requires clearing massive areas of boreal forest, creating toxic <strong>tailings ponds</strong> that can leach into groundwater, consuming enormous amounts of water, and producing approximately three times more greenhouse gas emissions per barrel than conventional oil. The Athabasca River downstream has shown signs of contamination, and Indigenous communities nearby (like Fort Chipewyan) have reported elevated cancer rates. While profitable, the environmental costs are enormous and long-lasting.</div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: Describe one of the 4 settlement patterns and explain why people would have settled that way historically.</div>
+    <div class="quiz-q">Q: Identify one "People" positive and one "Planet" negative impact of oil sands development, using P3.</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans">Example answer: <strong>Linear pattern along waterways</strong> — Early settlers in Canada built their communities along rivers and lakeshores because water was the most important resource. It provided fresh drinking water, a source of food (fish), and most importantly, a transportation route. Before roads and railways, rivers like the St. Lawrence were the highways of Canada — settlers needed to be close to them to trade goods, travel, and receive supplies.</div>
+    <div class="quiz-ans"><strong>People (Positive):</strong> The oil sands create tens of thousands of high-paying jobs in Fort McMurray and across Alberta. Workers in the oil sands earn well above average Canadian wages, and the industry generates billions in government revenue that funds public services like healthcare and education for all Canadians.<br><br><strong>Planet (Negative):</strong> Oil sands operations are Canada's single largest source of greenhouse gas emissions, contributing significantly to climate change. Additionally, massive toxic tailings ponds covering hundreds of square kilometres risk leaking into the Athabasca River system, harming aquatic life and potentially contaminating drinking water for downstream communities, including Indigenous communities like the Mikisew Cree and Athabasca Chipewyan First Nations.</div>
   </div>
 </div>
 
-<!-- =========== POPULATION DENSITY =========== -->
-<div class="section" id="density">
+<!-- =========== INDIGENOUS RIGHTS =========== -->
+<div class="section" id="indigenous">
   <div class="sec-head">
-    <div class="sec-icon" style="background:rgba(232,197,71,0.12);color:var(--c-density)">📍</div>
+    <div class="sec-icon" style="background:rgba(179,136,255,0.12);color:var(--c-indigenous)">🪶</div>
     <div>
-      <div class="sec-title" style="color:var(--c-density)">Population Density</div>
-      <div class="sec-sub">// definition · examples · Canada's density</div>
+      <div class="sec-title" style="color:var(--c-indigenous)">Indigenous Territorial & Resource Rights</div>
+      <div class="sec-sub">// rights framework · oil sands impacts · Grassy Narrows case study</div>
     </div>
   </div>
 
   <div class="cards-grid">
-    <div class="card" style="--ca:var(--c-density)">
-      <div class="card-title">What Is Population Density?</div>
-      <p><em>Population density</em> is the number of people living in a given area, expressed as <em>people per km²</em>.</p>
-      <br>
-      <div style="background:var(--surface2);border-radius:6px;padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--c-density);margin:10px 0">
-        Population Density = Total Population ÷ Area (km²)
+    <div class="card" style="--ca:var(--c-indigenous)">
+      <div class="card-title">Indigenous Resource Rights</div>
+      <ul>
+        <li>Indigenous peoples have <em>treaty rights</em> that guarantee access to land, hunting, fishing, and resources</li>
+        <li><em>Section 35 of the Constitution Act (1982)</em> recognizes and affirms Indigenous rights</li>
+        <li>Canada is a signatory to <em>UNDRIP</em> (UN Declaration on the Rights of Indigenous Peoples) — requires <em>Free, Prior, and Informed Consent (FPIC)</em> before development on Indigenous lands</li>
+        <li>The government has a <em>Duty to Consult</em> Indigenous communities before approving resource projects on or near their territories</li>
+        <li>Many First Nations argue consultation is insufficient — they want <em>veto power</em> over projects on their land</li>
+        <li>Land claims and treaty negotiations are ongoing across Canada</li>
+      </ul>
+    </div>
+
+    <div class="card" style="--ca:var(--c-indigenous)">
+      <div class="card-title">Impacts of Oil Sands on Indigenous Communities</div>
+      <ul>
+        <li>Oil sands sit within or near <em>Treaty 6, 7, and 8</em> territories — First Nations signed these treaties believing their rights to the land would be protected</li>
+        <li>Boreal forest clearing destroys <em>hunting, trapping, and fishing grounds</em></li>
+        <li><em>Water contamination</em> in the Athabasca River — communities downstream report contaminated fish and drinking water</li>
+        <li><em>Fort Chipewyan</em> (Athabasca Chipewyan and Mikisew Cree First Nations): reported elevated cancer rates; government initially dismissed concerns</li>
+        <li>Tailings ponds have leaked, contaminating land used for traditional practices</li>
+        <li>Many communities were <em>not meaningfully consulted</em> before pipelines and oil sands projects were approved on their territories</li>
+        <li>Economic benefit has been <em>unequal</em> — some communities negotiated impact-benefit agreements, many received little</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Grassy Narrows -->
+  <div class="case-study">
+    <div class="case-title">🐟 Case Study: Grassy Narrows First Nation</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-indigenous);margin-bottom:8px">BACKGROUND</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-indigenous)">·</span> Located in northwestern Ontario near the English-Wabigoon River</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-indigenous)">·</span> From the 1960s–1970s, a <em style="color:var(--c-indigenous)">paper mill (Reed Paper Co.)</em> in Dryden discharged mercury-laden wastewater into the Wabigoon River</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-indigenous)">·</span> Mercury travelled downstream and <em style="color:var(--c-indigenous)">contaminated fish</em> in Grassy Narrows' territory</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-indigenous)">·</span> Fish were the primary food source and cultural cornerstone for the Anishinaabe community</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-indigenous)">·</span> Residents consumed contaminated fish for years before the extent was known</li>
+        </ul>
       </div>
-      <p>It tells you how <em>crowded or spread out</em> a population is across the land.</p>
-      <br>
-      <ul>
-        <li><em>High density:</em> many people in a small area (cities)</li>
-        <li><em>Low density:</em> few people spread across a large area (rural, northern Canada)</li>
-        <li>Canada's <em>overall density ≈ 4 people/km²</em> — one of the lowest in the world</li>
-        <li>But Canada's population is <em>extremely uneven</em> — most people are concentrated in the south</li>
-        <li>Toronto's density: ~4,400 people/km² vs. Nunavut: &lt;0.1 people/km²</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-density)">
-      <div class="card-title">Why Population Density Varies in Canada</div>
-      <ul>
-        <li><em>Climate:</em> harsh winters in the North make settlement difficult; milder south is more habitable</li>
-        <li><em>Agricultural land:</em> fertile farmland in southern Ontario and Prairies supports large populations</li>
-        <li><em>Resources:</em> mines, oil sands, and forests attract workers to specific regions</li>
-        <li><em>Transportation:</em> railways and highways developed in southern Canada; easier access = more settlement</li>
-        <li><em>History:</em> original European settlements were in the south along waterways (St. Lawrence, Great Lakes)</li>
-        <li><em>Jobs:</em> manufacturing, finance, and tech concentrated in cities → people follow jobs</li>
-      </ul>
-    </div>
-
-    <div class="card" style="--ca:var(--c-density); grid-column: 1 / -1;">
-      <div class="card-title">Density Across Canada — Key Examples</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:4px">
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
-          <div style="font-size:22px;margin-bottom:6px">🏙️</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">TORONTO</div>
-          <div style="font-size:13px;color:var(--text)">~4,400 people/km²</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Extremely high — dense urban core</div>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
-          <div style="font-size:22px;margin-bottom:6px">🌽</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">PRAIRIES</div>
-          <div style="font-size:13px;color:var(--text)">~2–3 people/km²</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Vast farmland, few cities</div>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
-          <div style="font-size:22px;margin-bottom:6px">🍂</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">ONTARIO (overall)</div>
-          <div style="font-size:13px;color:var(--text)">~13 people/km²</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Uneven — south dense, north sparse</div>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
-          <div style="font-size:22px;margin-bottom:6px">🧊</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">NUNAVUT</div>
-          <div style="font-size:13px;color:var(--text)">&lt;0.1 people/km²</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">Largest territory, smallest population</div>
-        </div>
-        <div style="background:var(--surface2);padding:14px;border-radius:8px;text-align:center">
-          <div style="font-size:22px;margin-bottom:6px">🍁</div>
-          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-density);margin-bottom:4px">CANADA (overall)</div>
-          <div style="font-size:13px;color:var(--text)">~4 people/km²</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px">One of world's lowest national densities</div>
-        </div>
+      <div>
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--c-indigenous);margin-bottom:8px">IMPACTS (P3)</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:#5b8dee">·</span><em style="color:#5b8dee">People:</em> Widespread <em style="color:#5b8dee">mercury poisoning</em> (Minamata disease) — neurological damage, tremors, vision loss, birth defects. Community still affected today. Loss of traditional fishing culture and food security.</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span><em style="color:var(--c-footprint)">Planet:</em> River ecosystem severely damaged. Mercury bioaccumulates up the food chain — fish, eagles, humans. Contamination persists decades later.</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-oilsands)">·</span><em style="color:var(--c-oilsands)">Profit:</em> Tourists and sport fishers stopped coming. Traditional economy destroyed. Government eventually paid compensation, but decades too late. Cleanup costs enormous.</li>
+          <li style="font-size:13px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-indigenous)">·</span><em style="color:var(--c-indigenous)">Outcome:</em> Grassy Narrows fought for decades and won a landmark Supreme Court ruling (2014) giving them control over logging in their territory. Still fighting for full river cleanup.</li>
+        </ul>
       </div>
     </div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: What is population density? Why is Canada's overall density low, even though cities like Toronto are very crowded?</div>
+    <div class="quiz-q">Q: What happened at Grassy Narrows, and what does this case study teach us about resource development and Indigenous rights?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans"><strong>Population density</strong> is the number of people per km² in an area. Canada's overall density is very low (~4 people/km²) because Canada is an enormous country (the 2nd largest in the world by area) with a relatively small population of ~40 million. However, most of those people are packed into a narrow strip along the US border in the south. Regions like Nunavut and the Northwest Territories cover millions of km² but have only a few thousand residents, which brings the national average way down. Toronto and Vancouver, by contrast, have very high local density because millions of people are living and working in a small urban area.</div>
+    <div class="quiz-ans">A paper mill in Dryden, Ontario discharged mercury into the English-Wabigoon River from the 1960s–70s, contaminating fish that were the primary food source for the Grassy Narrows Anishinaabe community. Residents ate the contaminated fish for years, leading to widespread <strong>mercury poisoning (Minamata disease)</strong> — causing neurological damage, tremors, blindness, and birth defects that still affect the community today.<br><br>This case teaches us that: (1) <strong>Industrial development near Indigenous communities can cause irreversible harm</strong> to both people and the environment. (2) The government failed to protect an Indigenous community's right to clean water and traditional food. (3) <strong>Meaningful consultation and consent</strong> before development could have prevented this. (4) Environmental impacts are not felt equally — Indigenous and lower-income communities are disproportionately harmed. The community's decades-long legal fight also shows the strength of Indigenous resistance and the importance of rights recognition.</div>
   </div>
 
   <div class="quiz-box">
-    <div class="quiz-q">Q: Give two reasons why northern Canada has a very low population density.</div>
+    <div class="quiz-q">Q: What is the "Duty to Consult," and why is it often controversial when it comes to pipeline approvals?</div>
     <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
-    <div class="quiz-ans"><strong>(1) Harsh climate:</strong> The Arctic and subarctic North has extremely cold winters, permafrost, and short growing seasons, making it difficult to farm, build infrastructure, or live comfortably year-round. <strong>(2) Lack of economic opportunity:</strong> There are fewer industries, jobs, and services in northern communities. The remoteness makes it expensive to live there, and transportation is limited. Most Canadians stay in the south where jobs, healthcare, schools, and services are accessible.</div>
+    <div class="quiz-ans">The <strong>Duty to Consult</strong> is Canada's legal obligation (grounded in Section 35 of the Constitution and confirmed by the Supreme Court) to meaningfully consult with Indigenous communities before approving any project that might affect their treaty rights or traditional lands.<br><br>It is controversial because: <strong>(1)</strong> Many First Nations argue that "consultation" falls short of true consent — the government talks to them but can still approve projects over their objections. <strong>(2)</strong> UNDRIP requires "Free, Prior, and Informed Consent" (FPIC), meaning Indigenous peoples should have a genuine say (and arguably a veto). <strong>(3)</strong> Pipeline routes often cross unceded (never-surrendered) territories, where Indigenous title was never legally extinguished. Groups like the Wet'suwet'en Nation (who opposed the Coastal GasLink pipeline) argued they never ceded their land and cannot be forced to accept pipelines through it.</div>
+  </div>
+</div>
+
+<!-- =========== ECOLOGICAL FOOTPRINTS =========== -->
+<div class="section" id="footprint">
+  <div class="sec-head">
+    <div class="sec-icon" style="background:rgba(149,224,108,0.12);color:var(--c-footprint)">🌍</div>
+    <div>
+      <div class="sec-title" style="color:var(--c-footprint)">Ecological Footprints</div>
+      <div class="sec-sub">// definition · productive land types · Canadian footprint · carrying capacity · sustainability graph</div>
+    </div>
+  </div>
+
+  <!-- Definition -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-footprint)">What Is an Ecological Footprint?</div>
+    <div class="info-block" style="--ca:var(--c-footprint)">
+      An <strong>ecological footprint</strong> measures the total amount of <strong>biologically productive land and water</strong> needed to produce the resources a person (or country) consumes AND absorb the waste they generate. It is expressed in <strong>global hectares (gha)</strong>.
+    </div>
+    <div class="cards-grid" style="margin-bottom:0">
+      <div class="card" style="--ca:var(--c-footprint)">
+        <div class="card-title">What Makes Up Your Footprint?</div>
+        <ul>
+          <li><em>Food:</em> What you eat — meat requires far more land than vegetables</li>
+          <li><em>Housing:</em> Size of home, energy used to heat/cool it, materials used to build it</li>
+          <li><em>Transportation:</em> Car use, flights, public transit — burning fuel leaves a carbon footprint</li>
+          <li><em>Goods &amp; Services:</em> Everything you buy required land, energy, and materials to produce</li>
+          <li><em>Waste:</em> How much garbage you produce — landfills use land; decomposing waste produces methane</li>
+          <li><em>Carbon:</em> The land needed to absorb your CO₂ emissions (forests act as carbon sinks)</li>
+        </ul>
+      </div>
+      <div class="card" style="--ca:var(--c-footprint)">
+        <div class="card-title">Canada's Ecological Footprint</div>
+        <ul>
+          <li>Canada has one of the <em>largest ecological footprints per person</em> in the world (~8–9 gha/person)</li>
+          <li>The global average is ~2.7 gha/person</li>
+          <li>The <em>fair Earth share</em> (what's actually available per person on Earth) ≈ <em>1.6 gha/person</em></li>
+          <li>This means Canadians use about <em>5× their fair share</em> of Earth's resources</li>
+          <li>Key drivers: cold climate (high heating needs), car-dependent cities, long-distance food systems, high meat consumption, energy-intensive industry</li>
+          <li>Canada's large land area means it has a <em>biocapacity surplus</em> — but globally, humanity is in <em>overshoot</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Types of productive land -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-footprint)">Types of Productive Land</div>
+    <div class="land-grid">
+      <div class="land-card">
+        <div class="land-icon">🌾</div>
+        <div class="land-name">Cropland</div>
+        <div class="land-desc">Land used to grow food, animal feed, and biofuels. Most productive and most in demand.</div>
+      </div>
+      <div class="land-card">
+        <div class="land-icon">🐄</div>
+        <div class="land-name">Grazing Land</div>
+        <div class="land-desc">Pasture used for raising livestock (cattle, sheep). Meat has a very large land footprint.</div>
+      </div>
+      <div class="land-card">
+        <div class="land-icon">🌲</div>
+        <div class="land-name">Forest Land</div>
+        <div class="land-desc">Land needed to absorb CO₂ (carbon sequestration) and produce timber and paper products.</div>
+      </div>
+      <div class="land-card">
+        <div class="land-icon">🐟</div>
+        <div class="land-name">Fishing Grounds</div>
+        <div class="land-desc">Ocean and freshwater areas needed to sustain seafood consumed. Includes marine ecosystems.</div>
+      </div>
+      <div class="land-card">
+        <div class="land-icon">🏗️</div>
+        <div class="land-name">Built-Up Land</div>
+        <div class="land-desc">Land covered by cities, roads, buildings, and infrastructure. Permanently removed from natural use.</div>
+      </div>
+      <div class="land-card">
+        <div class="land-icon">⚡</div>
+        <div class="land-name">Carbon Land</div>
+        <div class="land-desc">Forest land needed to absorb CO₂ from burning fossil fuels. Often the largest part of footprint.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key terms -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-footprint)">Key Sustainability Terms</div>
+    <div class="terms-grid">
+      <div class="term-card">
+        <strong>Carrying Capacity</strong>
+        <p>The maximum population that an ecosystem (or the planet) can sustainably support with the available resources without degrading the environment.</p>
+      </div>
+      <div class="term-card">
+        <strong>Fair Earth Share</strong>
+        <p>The amount of biologically productive land available per person on Earth if it were divided equally. Currently ≈ <strong>1.6 gha per person</strong>. Canadians use ~8–9 gha — far above their fair share.</p>
+      </div>
+      <div class="term-card">
+        <strong>Biocapacity</strong>
+        <p>The total amount of biologically productive land and water an area (country or planet) has available to regenerate resources and absorb waste.</p>
+      </div>
+      <div class="term-card">
+        <strong>Overshoot</strong>
+        <p>When humanity's ecological footprint exceeds Earth's biocapacity — we are consuming resources faster than they can be replenished. We are currently in global overshoot every year (Earth Overshoot Day gets earlier each year).</p>
+      </div>
+      <div class="term-card">
+        <strong>Ecological Deficit (LOAD)</strong>
+        <p>When a country's footprint exceeds its own biocapacity — it is a "debtor" nation, borrowing from other countries' resources or from future generations.</p>
+      </div>
+      <div class="term-card">
+        <strong>Sustainability</strong>
+        <p>Using resources at a rate at which they can naturally replenish, so that future generations can meet their own needs. The goal is to live within Earth's carrying capacity.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sustainability Graph -->
+  <div class="wrap-box">
+    <div class="wrap-title" style="color:var(--c-footprint)">The Sustainability Graph — Understanding Overshoot</div>
+    <div class="info-block" style="--ca:var(--c-footprint);margin-bottom:20px">
+      The sustainability graph shows two lines over time: <strong>Ecological Footprint</strong> (demand — what we use) and <strong>Biocapacity</strong> (supply — what Earth can provide). When demand exceeds supply, we enter <strong>overshoot</strong>.
+    </div>
+
+    <div style="background:var(--surface2);border-radius:8px;padding:20px;margin-bottom:20px">
+      <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:600px;display:block;margin:0 auto">
+        <!-- Grid lines -->
+        <line x1="60" y1="20" x2="60" y2="170" stroke="#252a38" stroke-width="1"/>
+        <line x1="60" y1="170" x2="560" y2="170" stroke="#252a38" stroke-width="1"/>
+        <line x1="60" y1="130" x2="560" y2="130" stroke="#252a38" stroke-width="0.5" stroke-dasharray="4,4"/>
+        <line x1="60" y1="90" x2="560" y2="90" stroke="#252a38" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+        <!-- Biocapacity line (roughly flat, slightly declining) -->
+        <polyline points="60,95 150,98 250,102 350,108 450,112 560,116" fill="none" stroke="#5b8dee" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- Footprint line (rising) -->
+        <polyline points="60,110 150,100 250,90 350,72 450,54 560,36" fill="none" stroke="#95e06c" stroke-width="2.5" stroke-linejoin="round"/>
+
+        <!-- Overshoot shading -->
+        <polygon points="200,99 250,90 350,72 450,54 560,36 560,116 450,112 350,108 250,102 200,99" fill="rgba(232,93,117,0.12)" stroke="rgba(232,93,117,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+
+        <!-- Labels -->
+        <text x="565" y="40" fill="#95e06c" font-size="10" font-family="monospace">FOOTPRINT</text>
+        <text x="565" y="118" fill="#5b8dee" font-size="10" font-family="monospace">BIOCAPACITY</text>
+
+        <!-- Overshoot label -->
+        <text x="390" y="78" fill="#e85d75" font-size="11" font-family="monospace" font-weight="500">OVERSHOOT</text>
+        <text x="390" y="91" fill="#8892aa" font-size="9" font-family="monospace">(ecological deficit)</text>
+
+        <!-- Intersection marker -->
+        <circle cx="200" cy="99" r="4" fill="#e8c547"/>
+        <line x1="200" y1="99" x2="200" y2="170" stroke="#e8c547" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="170" y="183" fill="#e8c547" font-size="9" font-family="monospace">CROSSOVER</text>
+
+        <!-- Axis labels -->
+        <text x="300" y="205" text-anchor="middle" fill="#8892aa" font-size="10" font-family="monospace">TIME →</text>
+        <text x="20" y="100" fill="#8892aa" font-size="10" font-family="monospace" transform="rotate(-90,20,100)">gha</text>
+
+        <!-- Year labels -->
+        <text x="60" y="183" fill="#8892aa" font-size="9" font-family="monospace">1970</text>
+        <text x="245" y="183" fill="#8892aa" font-size="9" font-family="monospace">1990</text>
+        <text x="445" y="183" fill="#8892aa" font-size="9" font-family="monospace">2020</text>
+      </svg>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;border-left:3px solid var(--c-footprint)">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-footprint);margin-bottom:8px">Reading the Graph</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span><strong style="color:var(--c-footprint)">Green line (Footprint):</strong> rising — humanity uses more and more resources each year</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:#5b8dee)">·</span><strong style="color:#5b8dee">Blue line (Biocapacity):</strong> roughly flat or declining — Earth's productive land is not growing (and is being lost to urbanization/degradation)</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:#e8c547">·</span><strong style="color:#e8c547">Yellow dot (Crossover ~1970s):</strong> the point when humanity first exceeded biocapacity</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:#e85d75">·</span><strong style="color:#e85d75">Red zone (Overshoot):</strong> the gap between demand and supply — we are in "ecological debt"</li>
+        </ul>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;border-left:3px solid var(--c-footprint)">
+        <p style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-footprint);margin-bottom:8px">Consequences of Overshoot</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px">
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span>Fish stocks collapse (overfishing)</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span>Forests shrink (deforestation)</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span>Freshwater aquifers depleted</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span>CO₂ accumulates → climate change accelerates</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span>Soil degradation reduces agricultural capacity</li>
+          <li style="font-size:12.5px;padding-left:14px;position:relative;line-height:1.4"><span style="position:absolute;left:0;color:var(--c-footprint)">·</span>Biodiversity loss — species extinction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: What is an ecological footprint? Why is Canada's footprint considered unsustainable globally?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">An <strong>ecological footprint</strong> measures the total amount of biologically productive land needed to support a person's or country's consumption and absorb their waste. It's measured in global hectares (gha).<br><br>Canada's footprint is approximately <strong>8–9 gha per person</strong>, one of the world's highest. The global fair Earth share — how much land is actually available per person if divided equally among all humans — is only about <strong>1.6 gha per person</strong>. This means Canadians consume roughly <strong>5× their fair share</strong> of Earth's resources. If everyone lived like Canadians, we would need approximately 5 Earths to sustain humanity. This is unsustainable because it means other countries have less available, and we are drawing down resources faster than they can replenish — contributing to global overshoot.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: Define carrying capacity, overshoot, and fair Earth share. How are they related?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans"><strong>Carrying Capacity:</strong> The maximum population an environment can support indefinitely without degrading it. Earth has a carrying capacity — a limit to how many people it can sustain at current consumption levels.<br><br><strong>Fair Earth Share:</strong> If all of Earth's biologically productive land (~13.1 billion gha) were divided equally among all humans (~8 billion), each person would get about <strong>1.6 gha</strong> — this is the fair Earth share. It represents what's actually available per person.<br><br><strong>Overshoot:</strong> When humanity's total ecological footprint exceeds Earth's total biocapacity. We are currently in overshoot — meaning we are consuming more than Earth can regenerate in a year.<br><br><strong>Connection:</strong> When our demand (footprint) exceeds the planet's carrying capacity (biocapacity), we go into overshoot. The fair Earth share shows what each person's "budget" would be if we lived sustainably within Earth's limits. Canadians far exceed this budget, contributing to global overshoot.</div>
+  </div>
+
+  <div class="quiz-box">
+    <div class="quiz-q">Q: On the sustainability graph, what does the red "overshoot" zone represent? What happens if it keeps growing?</div>
+    <button class="reveal-btn" onclick="toggle(this)">Reveal Answer</button>
+    <div class="quiz-ans">The red overshoot zone represents the <strong>gap between humanity's ecological footprint (demand) and Earth's biocapacity (supply)</strong>. When the footprint line rises above the biocapacity line, we are using more resources than Earth can regenerate — we are drawing down natural capital (like spending from savings rather than living within your income).<br><br>If it keeps growing, the consequences include: <strong>fish stocks collapsing</strong> (overfishing beyond recovery), <strong>forests shrinking</strong>, <strong>freshwater aquifers drying up</strong>, <strong>more CO₂ in the atmosphere</strong> accelerating climate change, and ultimately a <strong>forced reduction</strong> in the human population's standard of living as resources become scarce. The key message is that overshoot is not indefinitely sustainable — at some point, nature's ability to regenerate will be so degraded that it cannot support current population levels.</div>
   </div>
 </div>
 
